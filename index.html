@@ -218,10 +218,18 @@
         <input type="text" id="searchInput" placeholder="🔍  Cerca nome, mansione…" oninput="applyFilters()">
       </div>
       <div class="filter-group">
+        <label>Anno</label>
+        <select id="filterAnno" onchange="applyFilters()">
+          <option value="">Tutti</option>
+        </select>
+      </div>
+      <div class="filter-group">
         <label>Mese</label>
         <select id="filterMese" onchange="applyFilters()">
           <option value="">Tutti</option>
-          <option>Febbraio</option><option>Marzo</option><option>Aprile</option><option>Maggio</option><option>Giugno</option>
+          <option>Gennaio</option><option>Febbraio</option><option>Marzo</option><option>Aprile</option>
+          <option>Maggio</option><option>Giugno</option><option>Luglio</option><option>Agosto</option>
+          <option>Settembre</option><option>Ottobre</option><option>Novembre</option><option>Dicembre</option>
         </select>
       </div>
       <div class="filter-group">
@@ -411,10 +419,18 @@
       <div class="section-head"><span class="section-title">Dettaglio assunti per mese</span></div>
       <div class="filters" style="border:none;border-bottom:1px solid var(--border);border-radius:0;box-shadow:none;">
         <div class="filter-group">
-          <label>Filtra mese</label>
+          <label>Anno</label>
+          <select id="filterAnnoDetail" onchange="renderMeseDetail()">
+            <option value="">Tutti</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Mese</label>
           <select id="filterMeseDetail" onchange="renderMeseDetail()">
             <option value="">Tutti</option>
-            <option>Febbraio</option><option>Marzo</option><option>Aprile</option><option>Maggio</option><option>Giugno</option>
+            <option>Gennaio</option><option>Febbraio</option><option>Marzo</option><option>Aprile</option>
+            <option>Maggio</option><option>Giugno</option><option>Luglio</option><option>Agosto</option>
+            <option>Settembre</option><option>Ottobre</option><option>Novembre</option><option>Dicembre</option>
           </select>
         </div>
       </div>
@@ -484,52 +500,54 @@
 // ─── DATA ─────────────────────────────────────────────────
 const DATA = [
   // FEBBRAIO
-  {nome:"Raman Mersan",mansione:"Magazzino Ricambi – Logistico",sede:"Bolzano",azienda:"AUTOCITY",data:"02/02/2026",mese:"Febbraio",area:"Logistica / Magazzino",pipeline:null},
-  {nome:"Francesca Castelli",mansione:"HR Amministrazione",sede:"Bolzano",azienda:"B1",data:"02/02/2026",mese:"Febbraio",area:"Risorse Umane",pipeline:null},
-  {nome:"Corradini Greta",mansione:"HR Formazione",sede:"Bolzano",azienda:"B1",data:"09/02/2026",mese:"Febbraio",area:"Risorse Umane",pipeline:null},
-  {nome:"Spagnuolo Andrea",mansione:"Venditore Usato",sede:"Bolzano",azienda:"B1",data:"15/02/2026",mese:"Febbraio",area:"Vendite",pipeline:null},
-  {nome:"Sing Jaskaran",mansione:"Avis Aeroporto",sede:"Bolzano",azienda:"B1",data:"16/02/2026",mese:"Febbraio",area:"Customer Care / BDC",pipeline:null},
-  {nome:"Giuseppe Buonsante",mansione:"HR Selezioni",sede:"Bolzano",azienda:"B1",data:"16/02/2026",mese:"Febbraio",area:"Risorse Umane",pipeline:null},
-  {nome:"Grandinetti Susanna",mansione:"Segretaria Service",sede:"Bolzano",azienda:"AUTOCITY",data:"18/02/2026",mese:"Febbraio",area:"Back Office / Amm.",pipeline:null},
-  {nome:"Motelli Federico",mansione:"BDC",sede:"Brescia",azienda:"B1",data:"02/02/2026",mese:"Febbraio",area:"Customer Care / BDC",pipeline:null},
+  {nome:"Raman Mersan",mansione:"Magazzino Ricambi – Logistico",sede:"Bolzano",azienda:"AUTOCITY",data:"02/02/2026",mese:"Febbraio",anno:"2026",area:"Logistica / Magazzino",pipeline:null},
+  {nome:"Francesca Castelli",mansione:"HR Amministrazione",sede:"Bolzano",azienda:"B1",data:"02/02/2026",mese:"Febbraio",anno:"2026",area:"Risorse Umane",pipeline:null},
+  {nome:"Corradini Greta",mansione:"HR Formazione",sede:"Bolzano",azienda:"B1",data:"09/02/2026",mese:"Febbraio",anno:"2026",area:"Risorse Umane",pipeline:null},
+  {nome:"Spagnuolo Andrea",mansione:"Venditore Usato",sede:"Bolzano",azienda:"B1",data:"15/02/2026",mese:"Febbraio",anno:"2026",area:"Vendite",pipeline:null},
+  {nome:"Sing Jaskaran",mansione:"Avis Aeroporto",sede:"Bolzano",azienda:"B1",data:"16/02/2026",mese:"Febbraio",anno:"2026",area:"Customer Care / BDC",pipeline:null},
+  {nome:"Giuseppe Buonsante",mansione:"HR Selezioni",sede:"Bolzano",azienda:"B1",data:"16/02/2026",mese:"Febbraio",anno:"2026",area:"Risorse Umane",pipeline:null},
+  {nome:"Grandinetti Susanna",mansione:"Segretaria Service",sede:"Bolzano",azienda:"AUTOCITY",data:"18/02/2026",mese:"Febbraio",anno:"2026",area:"Back Office / Amm.",pipeline:null},
+  {nome:"Motelli Federico",mansione:"BDC",sede:"Brescia",azienda:"B1",data:"02/02/2026",mese:"Febbraio",anno:"2026",area:"Customer Care / BDC",pipeline:null},
   // MARZO
-  {nome:"Fornasiero Nicolas",mansione:"Resp. di Salone BYD",sede:"Vicenza",azienda:"B1",data:"02/03/2026",mese:"Marzo",area:"Vendite",pipeline:null},
-  {nome:"Manente Matteo",mansione:"Accettatore",sede:"Bolzano",azienda:"AUTOCITY",data:"23/03/2026",mese:"Marzo",area:"Accettazione",pipeline:"Feb 2026"},
-  {nome:"Hafsa Charafeddine",mansione:"BDC",sede:"Brescia",azienda:"B1",data:"23/03/2026",mese:"Marzo",area:"Customer Care / BDC",pipeline:null},
-  {nome:"Federico Ballan",mansione:"Genius / Consegnatore",sede:"Padova",azienda:"B1",data:"23/03/2026",mese:"Marzo",area:"Genius / Consegnatore",pipeline:null},
+  {nome:"Fornasiero Nicolas",mansione:"Resp. di Salone BYD",sede:"Vicenza",azienda:"B1",data:"02/03/2026",mese:"Marzo",anno:"2026",area:"Vendite",pipeline:null},
+  {nome:"Manente Matteo",mansione:"Accettatore",sede:"Bolzano",azienda:"AUTOCITY",data:"23/03/2026",mese:"Marzo",anno:"2026",area:"Accettazione",pipeline:"Feb 2026"},
+  {nome:"Hafsa Charafeddine",mansione:"BDC",sede:"Brescia",azienda:"B1",data:"23/03/2026",mese:"Marzo",anno:"2026",area:"Customer Care / BDC",pipeline:null},
+  {nome:"Federico Ballan",mansione:"Genius / Consegnatore",sede:"Padova",azienda:"B1",data:"23/03/2026",mese:"Marzo",anno:"2026",area:"Genius / Consegnatore",pipeline:null},
   // APRILE
-  {nome:"Zambelli Alice",mansione:"Back Office Junior BYD",sede:"Brescia",azienda:"B1",data:"01/04/2026",mese:"Aprile",area:"Back Office / Amm.",pipeline:null},
-  {nome:"Bortolotti Angelo",mansione:"Piazzalista",sede:"Brescia",azienda:"B1",data:"01/04/2026",mese:"Aprile",area:"Logistica / Magazzino",pipeline:null},
-  {nome:"Sartori Thomas",mansione:"Venditore Ricambi",sede:"Trento",azienda:"AUTOCITY",data:"01/04/2026",mese:"Aprile",area:"Vendite",pipeline:null},
-  {nome:"Letizia Coveri",mansione:"Brand Manager Denza",sede:"Bologna",azienda:"B1",data:"07/04/2026",mese:"Aprile",area:"Marketing",pipeline:null},
-  {nome:"Mohssine Elarfaoui",mansione:"Analista – Programmatore",sede:"Bolzano",azienda:"PANTA",data:"13/04/2026",mese:"Aprile",area:"Tecnica / IT",pipeline:null},
-  {nome:"Giada Bordignon",mansione:"Marketing Ops & Event Asst.",sede:"Brescia",azienda:"B1",data:"20/04/2026",mese:"Aprile",area:"Marketing",pipeline:null},
-  {nome:"Ada Martina Lima",mansione:"Accettatore",sede:"Trento",azienda:"B1",data:"20/04/2026",mese:"Aprile",area:"Accettazione",pipeline:"Mar 2026"},
-  {nome:"Mario Fracca",mansione:"Venditore Ricambi",sede:"Verona",azienda:"AUTOCITY",data:"20/04/2026",mese:"Aprile",area:"Vendite",pipeline:null},
-  {nome:"Iris Alimerkaj",mansione:"Junior Back Office",sede:"Vicenza",azienda:"B1",data:"20/04/2026",mese:"Aprile",area:"Back Office / Amm.",pipeline:null},
+  {nome:"Zambelli Alice",mansione:"Back Office Junior BYD",sede:"Brescia",azienda:"B1",data:"01/04/2026",mese:"Aprile",anno:"2026",area:"Back Office / Amm.",pipeline:null},
+  {nome:"Bortolotti Angelo",mansione:"Piazzalista",sede:"Brescia",azienda:"B1",data:"01/04/2026",mese:"Aprile",anno:"2026",area:"Logistica / Magazzino",pipeline:null},
+  {nome:"Sartori Thomas",mansione:"Venditore Ricambi",sede:"Trento",azienda:"AUTOCITY",data:"01/04/2026",mese:"Aprile",anno:"2026",area:"Vendite",pipeline:null},
+  {nome:"Letizia Coveri",mansione:"Brand Manager Denza",sede:"Bologna",azienda:"B1",data:"07/04/2026",mese:"Aprile",anno:"2026",area:"Marketing",pipeline:null},
+  {nome:"Mohssine Elarfaoui",mansione:"Analista – Programmatore",sede:"Bolzano",azienda:"PANTA",data:"13/04/2026",mese:"Aprile",anno:"2026",area:"Tecnica / IT",pipeline:null},
+  {nome:"Giada Bordignon",mansione:"Marketing Ops & Event Asst.",sede:"Brescia",azienda:"B1",data:"20/04/2026",mese:"Aprile",anno:"2026",area:"Marketing",pipeline:null},
+  {nome:"Ada Martina Lima",mansione:"Accettatore",sede:"Trento",azienda:"B1",data:"20/04/2026",mese:"Aprile",anno:"2026",area:"Accettazione",pipeline:"Mar 2026"},
+  {nome:"Mario Fracca",mansione:"Venditore Ricambi",sede:"Verona",azienda:"AUTOCITY",data:"20/04/2026",mese:"Aprile",anno:"2026",area:"Vendite",pipeline:null},
+  {nome:"Iris Alimerkaj",mansione:"Junior Back Office",sede:"Vicenza",azienda:"B1",data:"20/04/2026",mese:"Aprile",anno:"2026",area:"Back Office / Amm.",pipeline:null},
   // MAGGIO
-  {nome:"Giuseppe Basciani",mansione:"Tecnico Meccanico",sede:"Bolzano",azienda:"AUTOCITY",data:"04/05/2026",mese:"Maggio",area:"Tecnica / IT",pipeline:null},
-  {nome:"Laura Denaro",mansione:"Back Office Senior",sede:"Brescia",azienda:"B1",data:"04/05/2026",mese:"Maggio",area:"Back Office / Amm.",pipeline:"Apr 2026"},
-  {nome:"Maria Alexandra Pirlea",mansione:"Customer Care / Supporto BO",sede:"Brescia",azienda:"B1",data:"04/05/2026",mese:"Maggio",area:"Customer Care / BDC",pipeline:null},
-  {nome:"Nicolò Zanin",mansione:"Accettatore",sede:"Desenzano",azienda:"B1",data:"04/05/2026",mese:"Maggio",area:"Accettazione",pipeline:"Mar 2026"},
-  {nome:"Ramon Marcantonio",mansione:"Logistica / Magazzino",sede:"Bolzano",azienda:"AUTOCITY",data:"11/05/2026",mese:"Maggio",area:"Logistica / Magazzino",pipeline:null},
-  {nome:"Alessio Toffanin",mansione:"Resp. Tecnico Revisioni",sede:"Bolzano",azienda:"AUTOCITY",data:"11/05/2026",mese:"Maggio",area:"Tecnica / IT",pipeline:"Feb–Apr 2026"},
-  {nome:"Christian Joy Psenner",mansione:"Magazziniere",sede:"Bolzano",azienda:"AUTOCITY",data:"18/05/2026",mese:"Maggio",area:"Logistica / Magazzino",pipeline:null},
-  {nome:"Antonio Di Lorenzo",mansione:"Accettazione + Magazzino",sede:"Trento",azienda:"B1",data:"18/05/2026",mese:"Maggio",area:"Accettazione",pipeline:null},
+  {nome:"Giuseppe Basciani",mansione:"Tecnico Meccanico",sede:"Bolzano",azienda:"AUTOCITY",data:"04/05/2026",mese:"Maggio",anno:"2026",area:"Tecnica / IT",pipeline:null},
+  {nome:"Laura Denaro",mansione:"Back Office Senior",sede:"Brescia",azienda:"B1",data:"04/05/2026",mese:"Maggio",anno:"2026",area:"Back Office / Amm.",pipeline:"Apr 2026"},
+  {nome:"Maria Alexandra Pirlea",mansione:"Customer Care / Supporto BO",sede:"Brescia",azienda:"B1",data:"04/05/2026",mese:"Maggio",anno:"2026",area:"Customer Care / BDC",pipeline:null},
+  {nome:"Nicolò Zanin",mansione:"Accettatore",sede:"Desenzano",azienda:"B1",data:"04/05/2026",mese:"Maggio",anno:"2026",area:"Accettazione",pipeline:"Mar 2026"},
+  {nome:"Ramon Marcantonio",mansione:"Logistica / Magazzino",sede:"Bolzano",azienda:"AUTOCITY",data:"11/05/2026",mese:"Maggio",anno:"2026",area:"Logistica / Magazzino",pipeline:null},
+  {nome:"Alessio Toffanin",mansione:"Resp. Tecnico Revisioni",sede:"Bolzano",azienda:"AUTOCITY",data:"11/05/2026",mese:"Maggio",anno:"2026",area:"Tecnica / IT",pipeline:"Feb–Apr 2026"},
+  {nome:"Christian Joy Psenner",mansione:"Magazziniere",sede:"Bolzano",azienda:"AUTOCITY",data:"18/05/2026",mese:"Maggio",anno:"2026",area:"Logistica / Magazzino",pipeline:null},
+  {nome:"Antonio Di Lorenzo",mansione:"Accettazione + Magazzino",sede:"Trento",azienda:"B1",data:"18/05/2026",mese:"Maggio",anno:"2026",area:"Accettazione",pipeline:null},
   // GIUGNO
-  {nome:"Tommaso Ciriolo",mansione:"Genius BYD",sede:"Bologna",azienda:"B1",data:"03/06/2026",mese:"Giugno",area:"Genius / Consegnatore",pipeline:"Apr–Mag 2026"},
-  {nome:"Kennet Faccini",mansione:"Accettazione BYD",sede:"Bologna",azienda:"B1",data:"01/06/2026",mese:"Giugno",area:"Accettazione",pipeline:"Apr–Mag 2026"},
-  {nome:"Marika Foggetti",mansione:"Amministratore Senior",sede:"Bolzano",azienda:"PANTA",data:"22/06/2026",mese:"Giugno",area:"Back Office / Amm.",pipeline:"Mar–Mag 2026"},
-  {nome:"Cristian Boccali",mansione:"Venditore Citroën",sede:"Brescia",azienda:"B1",data:"03/06/2026",mese:"Giugno",area:"Vendite",pipeline:"Apr–Mag 2026"},
-  {nome:"Christian Ferrazzi",mansione:"Resp. di Salone BYD",sede:"Verona",azienda:"B1",data:"03/06/2026",mese:"Giugno",area:"Vendite",pipeline:"Apr–Mag 2026"},
-  {nome:"Stefano Carpanoni",mansione:"Accettatore Senior",sede:"Padova",azienda:"B1",data:"03/06/2026",mese:"Giugno",area:"Accettazione",pipeline:"Apr–Mag 2026"},
-  {nome:"Ludwig Peer",mansione:"Aiuto Meccanico",sede:"Merano",azienda:"B1",data:"03/06/2026",mese:"Giugno",area:"Logistica / Magazzino",pipeline:null},
-  {nome:"Laura Bonafini",mansione:"Back Office Senior",sede:"Brescia",azienda:"B1",data:"20/07/2026",mese:"Giugno",area:"Back Office / Amm.",pipeline:"Mag–Giu 2026"},
+  {nome:"Tommaso Ciriolo",mansione:"Genius BYD",sede:"Bologna",azienda:"B1",data:"03/06/2026",mese:"Giugno",anno:"2026",area:"Genius / Consegnatore",pipeline:"Apr–Mag 2026"},
+  {nome:"Kennet Faccini",mansione:"Accettazione BYD",sede:"Bologna",azienda:"B1",data:"01/06/2026",mese:"Giugno",anno:"2026",area:"Accettazione",pipeline:"Apr–Mag 2026"},
+  {nome:"Marika Foggetti",mansione:"Amministratore Senior",sede:"Bolzano",azienda:"PANTA",data:"22/06/2026",mese:"Giugno",anno:"2026",area:"Back Office / Amm.",pipeline:"Mar–Mag 2026"},
+  {nome:"Cristian Boccali",mansione:"Venditore Citroën",sede:"Brescia",azienda:"B1",data:"03/06/2026",mese:"Giugno",anno:"2026",area:"Vendite",pipeline:"Apr–Mag 2026"},
+  {nome:"Christian Ferrazzi",mansione:"Resp. di Salone BYD",sede:"Verona",azienda:"B1",data:"03/06/2026",mese:"Giugno",anno:"2026",area:"Vendite",pipeline:"Apr–Mag 2026"},
+  {nome:"Stefano Carpanoni",mansione:"Accettatore Senior",sede:"Padova",azienda:"B1",data:"03/06/2026",mese:"Giugno",anno:"2026",area:"Accettazione",pipeline:"Apr–Mag 2026"},
+  {nome:"Ludwig Peer",mansione:"Aiuto Meccanico",sede:"Merano",azienda:"B1",data:"03/06/2026",mese:"Giugno",anno:"2026",area:"Logistica / Magazzino",pipeline:null},
+  {nome:"Laura Bonafini",mansione:"Back Office Senior",sede:"Brescia",azienda:"B1",data:"20/07/2026",mese:"Giugno",anno:"2026",area:"Back Office / Amm.",pipeline:"Mag–Giu 2026"},
   // GIUGNO — NUOVI (da xlsx aggiornato)
-  {nome:"Luca Peratoner",mansione:"Venditore Citroën – Genius",sede:"Bolzano",azienda:"B1",data:"22/06/2026",mese:"Giugno",area:"Vendite",pipeline:"Mag–Giu 2026"},
-  {nome:"Daniel Juganaru",mansione:"Accettatore Senior",sede:"Bolzano",azienda:"AUTOCITY",data:"08/06/2026",mese:"Giugno",area:"Accettazione",pipeline:null},
-  {nome:"Da Silva Oliveria Eliel Matheus",mansione:"Tecnico Meccanico",sede:"Merano",azienda:"AUTOCITY",data:"11/06/2026",mese:"Giugno",area:"Tecnica / IT",pipeline:null},
-  {nome:"Giacomo Cadorin",mansione:"Genius BYD",sede:"Vicenza",azienda:"B1",data:"03/06/2026",mese:"Giugno",area:"Genius / Consegnatore",pipeline:null},
+  {nome:"Luca Peratoner",mansione:"Venditore Citroën – Genius",sede:"Bolzano",azienda:"B1",data:"22/06/2026",mese:"Giugno",anno:"2026",area:"Vendite",pipeline:"Mag–Giu 2026"},
+  {nome:"Daniel Juganaru",mansione:"Accettatore Senior",sede:"Bolzano",azienda:"AUTOCITY",data:"08/06/2026",mese:"Giugno",anno:"2026",area:"Accettazione",pipeline:null},
+  // LUGLIO
+  {nome:"Max Badiani",mansione:"Venditore Usato",sede:"Bolzano",azienda:"B1",data:"13/07/2026",mese:"Luglio",anno:"2026",area:"Vendite",pipeline:null},
+  {nome:"Da Silva Oliveria Eliel Matheus",mansione:"Tecnico Meccanico",sede:"Merano",azienda:"AUTOCITY",data:"11/06/2026",mese:"Giugno",anno:"2026",area:"Tecnica / IT",pipeline:null},
+  {nome:"Giacomo Cadorin",mansione:"Genius BYD",sede:"Vicenza",azienda:"B1",data:"03/06/2026",mese:"Giugno",anno:"2026",area:"Genius / Consegnatore",pipeline:null},
 ];
 
 const EXITS = [
@@ -611,7 +629,7 @@ const MONTHLY = [
 let sortKey = 'mese', sortDir = 1;
 let filtered = [...DATA];
 
-const MESE_ORDER = {Febbraio:1,Marzo:2,Aprile:3,Maggio:4,Giugno:5};
+const MESE_ORDER = {Gennaio:1,Febbraio:2,Marzo:3,Aprile:4,Maggio:5,Giugno:6,Luglio:7,Agosto:8,Settembre:9,Ottobre:10,Novembre:11,Dicembre:12};
 const AREA_COLORS = {
   'Accettazione':'#1A3A5C','Vendite':'#2E6DA4','Back Office / Amm.':'#1B5E20',
   'Logistica / Magazzino':'#7B5800','Risorse Umane':'#6B21A8','Customer Care / BDC':'#0369A1',
@@ -631,20 +649,24 @@ function initKPI() {
 }
 
 function initFilters() {
+  const anni = [...new Set(DATA.map(d=>d.anno))].filter(Boolean).sort();
   const sedi = [...new Set(DATA.map(d=>d.sede))].sort();
   const aree = [...new Set(DATA.map(d=>d.area))].sort();
+  document.getElementById('filterAnno').innerHTML = '<option value="">Tutti</option>' + anni.map(a=>`<option>${a}</option>`).join('');
   document.getElementById('filterSede').innerHTML = '<option value="">Tutte</option>' + sedi.map(s=>`<option>${s}</option>`).join('');
   document.getElementById('filterArea').innerHTML = '<option value="">Tutte</option>' + aree.map(a=>`<option>${a}</option>`).join('');
 }
 
 function applyFilters() {
   const search = document.getElementById('searchInput').value.toLowerCase();
+  const anno = document.getElementById('filterAnno').value;
   const mese = document.getElementById('filterMese').value;
   const sede = document.getElementById('filterSede').value;
   const area = document.getElementById('filterArea').value;
   const az = document.getElementById('filterAzienda').value;
   filtered = DATA.filter(d =>
     (!search || d.nome.toLowerCase().includes(search) || d.mansione.toLowerCase().includes(search) || d.sede.toLowerCase().includes(search)) &&
+    (!anno || d.anno === anno) &&
     (!mese || d.mese === mese) &&
     (!sede || d.sede === sede) &&
     (!area || d.area === area) &&
@@ -655,6 +677,7 @@ function applyFilters() {
 
 function resetFilters() {
   document.getElementById('searchInput').value = '';
+  document.getElementById('filterAnno').value = '';
   document.getElementById('filterMese').value = '';
   document.getElementById('filterSede').value = '';
   document.getElementById('filterArea').value = '';
@@ -712,6 +735,10 @@ function renderVal() {
 }
 
 function renderMonthly() {
+  // populate anno detail filter
+  const anniD = [...new Set(DATA.map(d=>d.anno))].filter(Boolean).sort();
+  const annoDet = document.getElementById('filterAnnoDetail');
+  if (annoDet) annoDet.innerHTML = '<option value="">Tutti</option>' + anniD.map(a=>`<option>${a}</option>`).join('');
   document.getElementById('monthlyGrid').innerHTML = MONTHLY.map(m=>`
     <div class="month-card">
       <div class="month-name">${m.mese} 2026</div>
@@ -726,7 +753,8 @@ function renderMonthly() {
 
 function renderMeseDetail() {
   const sel = document.getElementById('filterMeseDetail').value;
-  const rows = DATA.filter(d => !sel || d.mese === sel);
+  const selAnno = document.getElementById('filterAnnoDetail') ? document.getElementById('filterAnnoDetail').value : '';
+  const rows = DATA.filter(d => (!sel || d.mese === sel) && (!selAnno || d.anno === selAnno));
   document.getElementById('meseDetailBody').innerHTML = rows.map((d,i)=>`
     <tr class="${i%2===0?'even':''}">
       <td class="td-name">${d.nome}</td>
