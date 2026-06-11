@@ -29,6 +29,20 @@
 
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #F0F4F8; color: var(--text); font-size: 14px; min-height: 100vh; }
 
+  /* DATE BANNER */
+  .date-banner { background: linear-gradient(135deg, #0F2540 0%, #1A3A5C 100%); color: #fff; padding: 10px 28px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: 12px; border-bottom: 2px solid rgba(255,255,255,0.08); }
+  .date-banner-left { display: flex; align-items: center; gap: 16px; }
+  .date-chip { display: flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 4px 12px; }
+  .date-chip .icon { font-size: 13px; }
+  .date-chip strong { font-weight: 600; }
+  .countdown-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .cc { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); border-radius: 6px; padding: 4px 10px; text-align: center; }
+  .cc-val { font-size: 16px; font-weight: 700; display: block; line-height: 1; }
+  .cc-lbl { font-size: 9px; opacity: 0.65; text-transform: uppercase; letter-spacing: 0.5px; }
+  .cc.urgent .cc-val { color: #FCA5A5; }
+  .cc.ok .cc-val { color: #86EFAC; }
+  .period-note { font-size: 11px; opacity: 0.55; }
+
   .header { background: var(--navy); color: #fff; padding: 20px 28px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
   .header h1 { font-size: 18px; font-weight: 600; letter-spacing: -0.3px; }
   .header-sub { font-size: 12px; opacity: 0.7; margin-top: 2px; }
@@ -138,10 +152,14 @@
     .kpi-val { font-size: 26px; }
     .filters { gap: 8px; }
     .filters select, .filters input { min-width: 100px; font-size: 12px; }
+    .date-banner { padding: 8px 14px; }
   }
 </style>
 </head>
 <body>
+
+<!-- DATE BANNER -->
+<div class="date-banner" id="dateBanner"></div>
 
 <div class="header">
   <div>
@@ -231,7 +249,7 @@
     <div class="section">
       <div class="section-head">
         <span class="section-title">Elenco assunti</span>
-        <span class="count-badge" id="countBadge">37 persone</span>
+        <span class="count-badge" id="countBadge">40 persone</span>
       </div>
       <div class="tbl-wrap">
         <table id="hiredTable">
@@ -243,7 +261,6 @@
               <th class="sortable" onclick="sortTable('azienda')">Azienda</th>
               <th class="sortable" onclick="sortTable('mese')">Mese ass.</th>
               <th>Data inizio</th>
-              
             </tr>
           </thead>
           <tbody id="hiredBody"></tbody>
@@ -364,7 +381,7 @@
     <div class="section">
       <div class="section-head">
         <span class="section-title">Candidati in valutazione / affiancamento a fine periodo</span>
-        <span class="count-badge" style="background:#FFF8E1;color:#7B5800;">19 attivi</span>
+        <span class="count-badge" style="background:#FFF8E1;color:#7B5800;">15 attivi</span>
       </div>
       <div class="tbl-wrap">
         <table class="val-table" id="valTable">
@@ -415,7 +432,58 @@
 </div>
 
 <script>
+// ─── DATE BANNER ──────────────────────────────────────────
+(function() {
+  const now = new Date();
+  const gg = ['domenica','lunedì','martedì','mercoledì','giovedì','venerdì','sabato'];
+  const mm = ['gennaio','febbraio','marzo','aprile','maggio','giugno','luglio','agosto','settembre','ottobre','novembre','dicembre'];
+  const dayName = gg[now.getDay()];
+  const dayNum = now.getDate();
+  const monthName = mm[now.getMonth()];
+  const year = now.getFullYear();
+
+  // Last day of current month
+  const lastDay = new Date(year, now.getMonth() + 1, 0);
+  const daysLeft = lastDay.getDate() - dayNum;
+
+  // Days since start of reporting period (1 Feb 2026)
+  const periodStart = new Date(2026, 1, 1); // Feb 1
+  const periodEnd   = new Date(2026, 5, 30); // Jun 30
+  const msDay = 86400000;
+  const daysSincePeriodStart = Math.max(0, Math.floor((now - periodStart) / msDay));
+  const daysToEndPeriod = Math.max(0, Math.ceil((periodEnd - now) / msDay));
+
+  const urgentClass = daysLeft <= 5 ? 'urgent' : 'ok';
+  const periodClass = daysToEndPeriod <= 10 ? 'urgent' : 'ok';
+
+  document.getElementById('dateBanner').innerHTML = `
+    <div class="date-banner-left">
+      <div class="date-chip">
+        <span class="icon">📅</span>
+        <span>Oggi è <strong>${dayName} ${dayNum} ${monthName} ${year}</strong></span>
+      </div>
+      <div class="countdown-chips">
+        <div class="cc ${urgentClass}">
+          <span class="cc-val">${daysLeft}</span>
+          <span class="cc-lbl">giorni a fine mese</span>
+        </div>
+        <div class="cc ${periodClass}">
+          <span class="cc-val">${daysToEndPeriod}</span>
+          <span class="cc-lbl">a fine periodo (30/06)</span>
+        </div>
+        <div class="cc">
+          <span class="cc-val">${daysSincePeriodStart}</span>
+          <span class="cc-lbl">giorni dall'inizio (01/02)</span>
+        </div>
+      </div>
+    </div>
+    <div class="period-note">Periodo di riferimento: 1 febbraio – 30 giugno 2026</div>
+  `;
+})();
+
+// ─── DATA ─────────────────────────────────────────────────
 const DATA = [
+  // FEBBRAIO
   {nome:"Raman Mersan",mansione:"Magazzino Ricambi – Logistico",sede:"Bolzano",azienda:"AUTOCITY",data:"02/02/2026",mese:"Febbraio",area:"Logistica / Magazzino",pipeline:null},
   {nome:"Francesca Castelli",mansione:"HR Amministrazione",sede:"Bolzano",azienda:"B1",data:"02/02/2026",mese:"Febbraio",area:"Risorse Umane",pipeline:null},
   {nome:"Corradini Greta",mansione:"HR Formazione",sede:"Bolzano",azienda:"B1",data:"09/02/2026",mese:"Febbraio",area:"Risorse Umane",pipeline:null},
@@ -424,10 +492,12 @@ const DATA = [
   {nome:"Giuseppe Buonsante",mansione:"HR Selezioni",sede:"Bolzano",azienda:"B1",data:"16/02/2026",mese:"Febbraio",area:"Risorse Umane",pipeline:null},
   {nome:"Grandinetti Susanna",mansione:"Segretaria Service",sede:"Bolzano",azienda:"AUTOCITY",data:"18/02/2026",mese:"Febbraio",area:"Back Office / Amm.",pipeline:null},
   {nome:"Motelli Federico",mansione:"BDC",sede:"Brescia",azienda:"B1",data:"02/02/2026",mese:"Febbraio",area:"Customer Care / BDC",pipeline:null},
+  // MARZO
   {nome:"Fornasiero Nicolas",mansione:"Resp. di Salone BYD",sede:"Vicenza",azienda:"B1",data:"02/03/2026",mese:"Marzo",area:"Vendite",pipeline:null},
   {nome:"Manente Matteo",mansione:"Accettatore",sede:"Bolzano",azienda:"AUTOCITY",data:"23/03/2026",mese:"Marzo",area:"Accettazione",pipeline:"Feb 2026"},
   {nome:"Hafsa Charafeddine",mansione:"BDC",sede:"Brescia",azienda:"B1",data:"23/03/2026",mese:"Marzo",area:"Customer Care / BDC",pipeline:null},
   {nome:"Federico Ballan",mansione:"Genius / Consegnatore",sede:"Padova",azienda:"B1",data:"23/03/2026",mese:"Marzo",area:"Genius / Consegnatore",pipeline:null},
+  // APRILE
   {nome:"Zambelli Alice",mansione:"Back Office Junior BYD",sede:"Brescia",azienda:"B1",data:"01/04/2026",mese:"Aprile",area:"Back Office / Amm.",pipeline:null},
   {nome:"Bortolotti Angelo",mansione:"Piazzalista",sede:"Brescia",azienda:"B1",data:"01/04/2026",mese:"Aprile",area:"Logistica / Magazzino",pipeline:null},
   {nome:"Sartori Thomas",mansione:"Venditore Ricambi",sede:"Trento",azienda:"AUTOCITY",data:"01/04/2026",mese:"Aprile",area:"Vendite",pipeline:null},
@@ -437,6 +507,7 @@ const DATA = [
   {nome:"Ada Martina Lima",mansione:"Accettatore",sede:"Trento",azienda:"B1",data:"20/04/2026",mese:"Aprile",area:"Accettazione",pipeline:"Mar 2026"},
   {nome:"Mario Fracca",mansione:"Venditore Ricambi",sede:"Verona",azienda:"AUTOCITY",data:"20/04/2026",mese:"Aprile",area:"Vendite",pipeline:null},
   {nome:"Iris Alimerkaj",mansione:"Junior Back Office",sede:"Vicenza",azienda:"B1",data:"20/04/2026",mese:"Aprile",area:"Back Office / Amm.",pipeline:null},
+  // MAGGIO
   {nome:"Giuseppe Basciani",mansione:"Tecnico Meccanico",sede:"Bolzano",azienda:"AUTOCITY",data:"04/05/2026",mese:"Maggio",area:"Tecnica / IT",pipeline:null},
   {nome:"Laura Denaro",mansione:"Back Office Senior",sede:"Brescia",azienda:"B1",data:"04/05/2026",mese:"Maggio",area:"Back Office / Amm.",pipeline:"Apr 2026"},
   {nome:"Maria Alexandra Pirlea",mansione:"Customer Care / Supporto BO",sede:"Brescia",azienda:"B1",data:"04/05/2026",mese:"Maggio",area:"Customer Care / BDC",pipeline:null},
@@ -445,17 +516,20 @@ const DATA = [
   {nome:"Alessio Toffanin",mansione:"Resp. Tecnico Revisioni",sede:"Bolzano",azienda:"AUTOCITY",data:"11/05/2026",mese:"Maggio",area:"Tecnica / IT",pipeline:"Feb–Apr 2026"},
   {nome:"Christian Joy Psenner",mansione:"Magazziniere",sede:"Bolzano",azienda:"AUTOCITY",data:"18/05/2026",mese:"Maggio",area:"Logistica / Magazzino",pipeline:null},
   {nome:"Antonio Di Lorenzo",mansione:"Accettazione + Magazzino",sede:"Trento",azienda:"B1",data:"18/05/2026",mese:"Maggio",area:"Accettazione",pipeline:null},
+  // GIUGNO
   {nome:"Tommaso Ciriolo",mansione:"Genius BYD",sede:"Bologna",azienda:"B1",data:"03/06/2026",mese:"Giugno",area:"Genius / Consegnatore",pipeline:"Apr–Mag 2026"},
   {nome:"Kennet Faccini",mansione:"Accettazione BYD",sede:"Bologna",azienda:"B1",data:"01/06/2026",mese:"Giugno",area:"Accettazione",pipeline:"Apr–Mag 2026"},
-  {nome:"Marika Foggetti",mansione:"Amministratore Senior",sede:"Bolzano",azienda:"PANTA",data:"In def.",mese:"Giugno",area:"Back Office / Amm.",pipeline:"Mar–Mag 2026"},
+  {nome:"Marika Foggetti",mansione:"Amministratore Senior",sede:"Bolzano",azienda:"PANTA",data:"22/06/2026",mese:"Giugno",area:"Back Office / Amm.",pipeline:"Mar–Mag 2026"},
   {nome:"Cristian Boccali",mansione:"Venditore Citroën",sede:"Brescia",azienda:"B1",data:"03/06/2026",mese:"Giugno",area:"Vendite",pipeline:"Apr–Mag 2026"},
   {nome:"Christian Ferrazzi",mansione:"Resp. di Salone BYD",sede:"Verona",azienda:"B1",data:"03/06/2026",mese:"Giugno",area:"Vendite",pipeline:"Apr–Mag 2026"},
   {nome:"Stefano Carpanoni",mansione:"Accettatore Senior",sede:"Padova",azienda:"B1",data:"03/06/2026",mese:"Giugno",area:"Accettazione",pipeline:"Apr–Mag 2026"},
   {nome:"Ludwig Peer",mansione:"Aiuto Meccanico",sede:"Merano",azienda:"B1",data:"03/06/2026",mese:"Giugno",area:"Logistica / Magazzino",pipeline:null},
   {nome:"Laura Bonafini",mansione:"Back Office Senior",sede:"Brescia",azienda:"B1",data:"20/07/2026",mese:"Giugno",area:"Back Office / Amm.",pipeline:"Mag–Giu 2026"},
+  // GIUGNO — NUOVI (da xlsx aggiornato)
+  {nome:"Daniel Juganaru",mansione:"Accettatore Senior",sede:"Bolzano",azienda:"AUTOCITY",data:"08/06/2026",mese:"Giugno",area:"Accettazione",pipeline:null},
+  {nome:"Da Silva Oliveria Eliel Matheus",mansione:"Tecnico Meccanico",sede:"Merano",azienda:"AUTOCITY",data:"11/06/2026",mese:"Giugno",area:"Tecnica / IT",pipeline:null},
+  {nome:"Giacomo Cadorin",mansione:"Genius BYD",sede:"Vicenza",azienda:"B1",data:"03/06/2026",mese:"Giugno",area:"Genius / Consegnatore",pipeline:null},
 ];
-
-const DOUBLES = ["Spagnuolo Andrea", "Fornasiero Nicolas", "Manente Matteo", "Hafsa Charafeddine"];
 
 const EXITS = [
   {nome:"Thiam Sokhna Diarra",azienda:"PANTA",reparto:"PANTA - AMM",sede:"Bolzano",data_inizio:"12/05/2025",data_uscita:"30/04/2026",mese:"Aprile",eta:31,eta_bucket:"30–39",anzianita:0.9,anz_bucket:"< 1 anno",mansione:"",nel_periodo:true},
@@ -501,25 +575,29 @@ const EXITS = [
 ];
 
 const VAL_DATA = [
-  {candidato:"Danilo Sartini / Matteo Venturi / Marco Mussoni",mansione:"Venditore nr. 2 BYD",sede:"Bologna",stato:"Colloqui 05/06/2026"},
-  {candidato:"Ghenadie Vintu",mansione:"Venditore nr. 2 DENZA",sede:"Bologna",stato:"Affiancamento in corso"},
-  {candidato:"Francesco Iovino",mansione:"Venditori Genius DENZA (3)",sede:"Bologna",stato:"Colloquio 04/06/2026"},
-  {candidato:"Daniele Brentan",mansione:"RDS",sede:"Brescia",stato:"Proposta da fare"},
-  {candidato:"Denissa Pepe",mansione:"Accettatore / Magazzino Ricambi",sede:"Brunico",stato:"Attesa valutazione Spinato"},
-  {candidato:"Michele Zigliani / Massim. Grisalfi",mansione:"Venditore (2 pos.)",sede:"Desenzano",stato:"In chiusura"},
-  {candidato:"Federica Fornasini",mansione:"Genius",sede:"Padova",stato:"INSERIMENTO BLOCCATO"},
-  {candidato:"Giuseppina Di Bartolo",mansione:"Accettatore Senior",sede:"Verona",stato:"Valutazione in corso"},
-  {candidato:"Xhafer Muka",mansione:"Coordinamento Amm.",sede:"Bolzano",stato:"Proposta da valutare"},
-  {candidato:"Daniel Pomarolli",mansione:"Warranty Specialist",sede:"Bolzano",stato:"Proposta da fare"},
-  {candidato:"Venditore Citroën",mansione:"Venditore Citroën",sede:"Bolzano",stato:"Colloqui entro 11/06"},
-  {candidato:"Venditore VO 2° piano",mansione:"Venditore VO",sede:"Bolzano",stato:"Colloquio 09/06/2026"},
-  {candidato:"Venditore senior / 2 junior",mansione:"Venditore (varie)",sede:"Brescia",stato:"Colloqui da organizzare"},
-  {candidato:"Sistemista TL Manager",mansione:"Sistemista TL Manager",sede:"Verona",stato:"Colloqui da organizzare"},
-  {candidato:"Sistemista",mansione:"Sistemista",sede:"Verona",stato:"Colloqui 03/06/2026"},
-  {candidato:"Analista – Programmatore",mansione:"Analista – Programmatore",sede:"Verona",stato:"Colloquio da organizzare"},
-  {candidato:"Responsabile di Salone",mansione:"Resp. di Salone",sede:"Vicenza",stato:"Candidati da valutare"},
-  {candidato:"Venditore Citroën – Genius",mansione:"Venditore Citroën – Genius",sede:"Bolzano",stato:"Incontro finale 03/06"},
-  {candidato:"Tecnico Meccanico",mansione:"Tecnico Meccanico",sede:"Bologna",stato:"Referenze in verifica"},
+  // BOLZANO
+  {candidato:"Xhafer Muka",mansione:"Coord. Amministrativo (AUTOCITY)",sede:"Bolzano",stato:"Proposta da valutare con Michi"},
+  {candidato:"Alessandro Ribechin / Davide D'Alberti",mansione:"Venditore Citroën",sede:"Bolzano",stato:"Colloqui entro 11/06"},
+  {candidato:"Luca Peratoner",mansione:"Venditore Citroën – Genius",sede:"Bolzano",stato:"Incontro finale 03/06/2026"},
+  // BRESCIA
+  {candidato:"Michele Chiari",mansione:"Venditore senior / junior",sede:"Brescia",stato:"Colloquio con Erica lunedì 15/06"},
+  {candidato:"Stefano Brognoli",mansione:"RDS",sede:"Brescia",stato:"A colloquio con AB"},
+  // BRUNICO
+  {candidato:"Denissa Pepe",mansione:"Accettatore / Magazzino Ricambi",sede:"Brunico",stato:"Val. positiva – attesa valutazione Spinato"},
+  // DESENZANO
+  {candidato:"Michele Zigliani / Massim. Grisalfi / E. Metelli / E. Gualtieri",mansione:"Venditore x 2",sede:"Desenzano",stato:"Affiancamento Zigliani il 13 + colloqui 11/06"},
+  // ORA
+  {candidato:"Dainyal Nasar",mansione:"Genius / Assistente Vendite",sede:"Ora",stato:"Colloquio 11/06"},
+  // PADOVA
+  {candidato:"Marco Ghirimoldi",mansione:"Venditore",sede:"Padova",stato:"Bozza contratto inviata"},
+  {candidato:"Federica Fornasini",mansione:"Genius",sede:"Padova",stato:"⛔ INSERIMENTO BLOCCATO"},
+  // VERONA
+  {candidato:"—",mansione:"Sistemista TL Manager (PANTA)",sede:"Verona",stato:"Colloqui da organizzare con EC e AB"},
+  {candidato:"Scamperle / Odia",mansione:"Sistemista (PANTA)",sede:"Verona",stato:"2° colloquio in corso"},
+  {candidato:"Lois Serjanaj / Hao Jie Zhan / B. Russo",mansione:"Analista–Programmatore (PANTA)",sede:"Verona",stato:"Colloquio da organizzare"},
+  {candidato:"Giuseppina Di Bartolo",mansione:"Accettatore Senior",sede:"Verona",stato:"Buon profilo – Liguori non valuta"},
+  // VICENZA
+  {candidato:"Enrico Bussolaro",mansione:"Responsabile di Salone",sede:"Vicenza",stato:"A colloquio con AB"},
 ];
 
 const MONTHLY = [
@@ -527,7 +605,7 @@ const MONTHLY = [
   {mese:"Marzo",active:24,hired:4,val:13,pipeline:1,tracker:48},
   {mese:"Aprile",active:39,hired:9,val:21,pipeline:2,tracker:65},
   {mese:"Maggio",active:31,hired:8,val:19,pipeline:3,tracker:60},
-  {mese:"Giugno",active:33,hired:8,val:19,pipeline:6,tracker:63},
+  {mese:"Giugno",active:33,hired:11,val:19,pipeline:6,tracker:63},
 ];
 
 let sortKey = 'mese', sortDir = 1;
@@ -541,12 +619,11 @@ const AREA_COLORS = {
 };
 
 function initKPI() {
-  const pipeline = DATA.filter(d=>d.pipeline).length;
-  const sedi = [...new Set(DATA.map(d=>d.sede))].length;
+  const total = DATA.length;
   document.getElementById('kpiGrid').innerHTML = [
-    {v:37,l:'Assunzioni totali (Feb–Giu)',cls:'green'},
+    {v:total,l:'Assunzioni totali (Feb–Giu)',cls:'green'},
     {v:40,l:'Uscite totali 2026',cls:'red'},
-    {v:'–3',l:'Saldo netto personale',cls:'red'},
+    {v:total-40,l:'Saldo netto personale',cls: (total-40)>=0 ? 'green' : 'red'},
     {v:4,l:'Assunti e poi dimessi',cls:'amber'},
     {v:'92.5%',l:'Copertura entrate/uscite',cls:'blue'},
     {v:'Giu 2026',l:'Ultimo aggiornamento',cls:''},
@@ -607,7 +684,7 @@ function renderTable() {
   const body = document.getElementById('hiredBody');
   document.getElementById('countBadge').textContent = filtered.length + ' persone';
   if (!filtered.length) {
-    body.innerHTML = '<tr><td colspan="7" class="no-results">Nessun risultato trovato</td></tr>';
+    body.innerHTML = '<tr><td colspan="6" class="no-results">Nessun risultato trovato</td></tr>';
     return;
   }
   body.innerHTML = filtered.map((d,i) => {
@@ -615,16 +692,14 @@ function renderTable() {
     const mesBadge = `<span class="badge badge-navy">${d.mese}</span>`;
     return `<tr class="${i%2===0?'even':''}">
       <td class="td-name">${d.nome}</td>
-      <td>${d.mansione}</td>
+      <td>${d.mansione}${pip ? '' : ''}</td>
       <td>${d.sede}</td>
       <td><span class="badge badge-blue">${d.azienda}</span></td>
       <td>${mesBadge}</td>
       <td style="white-space:nowrap;font-size:12px;">${d.data}</td>
-      <td>${pip}</td>
     </tr>`;
   }).join('');
 }
-
 
 function renderVal() {
   document.getElementById('valBody').innerHTML = VAL_DATA.map((d,i)=>`
@@ -671,39 +746,28 @@ function switchTab(id) {
 
 function initCharts() {
   const months = ['Feb','Mar','Apr','Mag','Giu'];
-  const attivo = [21,24,39,31,33];
-  const hired  = [8,4,9,8,8];
+  const MONTH_ORDER = ['Febbraio','Marzo','Aprile','Maggio','Giugno'];
+  const hired = MONTH_ORDER.map(m => DATA.filter(d=>d.mese===m).length);
 
   const uscitePeriodo = EXITS.filter(e=>e.nel_periodo);
-  const usciteMensili = ['Febbraio','Marzo','Aprile','Maggio','Giugno'].map(m=>uscitePeriodo.filter(e=>e.mese===m).length);
+  const usciteMensili = MONTH_ORDER.map(m=>uscitePeriodo.filter(e=>e.mese===m).length);
+
   new Chart(document.getElementById('chartAttivo'), {
     type:'bar',
-    data:{
-      labels:months,
-      datasets:[
-        {label:'Entrate',data:hired,backgroundColor:'rgba(27,94,32,0.8)',borderRadius:4,borderSkipped:false},
-        {label:'Uscite', data:usciteMensili,backgroundColor:'rgba(197,48,48,0.75)',borderRadius:4,borderSkipped:false},
-      ]
-    },
+    data:{labels:months, datasets:[
+      {label:'Entrate',data:hired,backgroundColor:'rgba(27,94,32,0.8)',borderRadius:4,borderSkipped:false},
+      {label:'Uscite', data:usciteMensili,backgroundColor:'rgba(197,48,48,0.75)',borderRadius:4,borderSkipped:false},
+    ]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:11},boxWidth:12}}},scales:{y:{beginAtZero:true,grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:11},stepSize:1}},x:{grid:{display:false},ticks:{font:{size:11}}}}}
   });
 
-  // Saldo netto mensile overview
   const saldoMensile = usciteMensili.map((u,i)=>hired[i]-u);
   new Chart(document.getElementById('chartSaldoOv'), {
     type:'bar',
-    data:{labels:months, datasets:[{
-      label:'Saldo',
-      data:saldoMensile,
-      backgroundColor:saldoMensile.map(v=>v>=0?'rgba(27,94,32,0.8)':'rgba(197,48,48,0.75)'),
-      borderRadius:4, borderSkipped:false
-    }]},
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false}},
-      scales:{y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:11},stepSize:1}},x:{grid:{display:false},ticks:{font:{size:11}}}}}
+    data:{labels:months, datasets:[{label:'Saldo',data:saldoMensile,backgroundColor:saldoMensile.map(v=>v>=0?'rgba(27,94,32,0.8)':'rgba(197,48,48,0.75)'),borderRadius:4,borderSkipped:false}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:11},stepSize:1}},x:{grid:{display:false},ticks:{font:{size:11}}}}}
   });
 
-  // Anzianità usciti overview (tutti 40)
   const anzBucketsOv = ['< 1 anno','1–3 anni','3–5 anni','> 5 anni'];
   const anzCountsOv  = anzBucketsOv.map(b => EXITS.filter(e=>e.anz_bucket===b).length);
   new Chart(document.getElementById('chartAnzOv'), {
@@ -724,24 +788,20 @@ function initCharts() {
   const areaCount = {};
   DATA.forEach(d=>{ areaCount[d.area] = (areaCount[d.area]||0)+1; });
   const areaEntries = Object.entries(areaCount).sort((a,b)=>b[1]-a[1]);
-  const areaColors = areaEntries.map(e=>AREA_COLORS[e[0]]||'#888');
   new Chart(document.getElementById('chartArea'), {
     type:'doughnut',
-    data:{labels:areaEntries.map(e=>e[0]),datasets:[{data:areaEntries.map(e=>e[1]),backgroundColor:areaColors,borderWidth:1,borderColor:'#fff'}]},
+    data:{labels:areaEntries.map(e=>e[0]),datasets:[{data:areaEntries.map(e=>e[1]),backgroundColor:areaEntries.map(e=>AREA_COLORS[e[0]]||'#888'),borderWidth:1,borderColor:'#fff'}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10},boxWidth:10,padding:6}}}}
   });
 
-  const MONTH_ORDER = ['Febbraio','Marzo','Aprile','Maggio','Giugno'];
-  const mensili = MONTH_ORDER.map(m => DATA.filter(d=>d.mese===m).length);
   new Chart(document.getElementById('chartCumul'), {
     type:'line',
-    data:{labels:months,datasets:[{label:'Assunzioni',data:mensili,borderColor:'#1B5E20',backgroundColor:'rgba(27,94,32,0.08)',fill:true,tension:0.3,pointRadius:5,pointBackgroundColor:'#1B5E20',borderWidth:2}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,max:12,grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:11},stepSize:1}},x:{grid:{display:false},ticks:{font:{size:11}}}}}
+    data:{labels:months,datasets:[{label:'Assunzioni',data:hired,borderColor:'#1B5E20',backgroundColor:'rgba(27,94,32,0.08)',fill:true,tension:0.3,pointRadius:5,pointBackgroundColor:'#1B5E20',borderWidth:2}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,max:14,grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:11},stepSize:1}},x:{grid:{display:false},ticks:{font:{size:11}}}}}
   });
 }
 
-
-// ─── EXITS LOGIC ────────────────────────────────────────
+// ─── EXITS ────────────────────────────────────────
 let filteredExits = [...EXITS];
 let exitSortKey = 'mese', exitSortDir = 1;
 
@@ -771,8 +831,7 @@ function applyExitFilters() {
 
 function resetExitFilters() {
   ['exitSearch','exitPeriodo','exitMese','exitSede','exitAnz','exitEta'].forEach(id => {
-    const el = document.getElementById(id);
-    el.value = '';
+    document.getElementById(id).value = '';
   });
   filteredExits = [...EXITS];
   renderExitTable();
@@ -780,7 +839,6 @@ function resetExitFilters() {
 }
 
 const MESE_ORD2 = {Gennaio:1,Febbraio:2,Marzo:3,Aprile:4,Maggio:5,Giugno:6,Luglio:7,Agosto:8};
-const ANZ_ORD = {'< 1 anno':1,'1–3 anni':2,'3–5 anni':3,'> 5 anni':4};
 
 function sortExits(key) {
   if (exitSortKey === key) exitSortDir *= -1;
@@ -837,21 +895,17 @@ function initExitCharts() {
   const inPeriodo = EXITS.filter(e=>e.nel_periodo);
   const entrate = mesiF.map(m => DATA.filter(d=>d.mese===m).length);
   const uscite  = mesiF.map(m => inPeriodo.filter(e=>e.mese===m).length);
-  const saldi   = entrate.map((e,i) => e - uscite[i]);
   const copertura = entrate.map((e,i) => uscite[i] ? Math.round(e/uscite[i]*100) : null);
 
-  // Saldo chart
   new Chart(document.getElementById('chartSaldo'), {
-    type: 'bar',
-    data: { labels: months, datasets: [
-      {label:'Entrate', data:entrate, backgroundColor:'rgba(27,94,32,0.8)', borderRadius:4, borderSkipped:false},
-      {label:'Uscite',  data:uscite,  backgroundColor:'rgba(197,48,48,0.75)', borderRadius:4, borderSkipped:false},
+    type:'bar',
+    data:{labels:months, datasets:[
+      {label:'Entrate',data:entrate,backgroundColor:'rgba(27,94,32,0.8)',borderRadius:4,borderSkipped:false},
+      {label:'Uscite', data:uscite, backgroundColor:'rgba(197,48,48,0.75)',borderRadius:4,borderSkipped:false},
     ]},
-    options: {responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:11},boxWidth:12}}},
-      scales:{y:{beginAtZero:true,grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:11},stepSize:1}},x:{grid:{display:false},ticks:{font:{size:11}}}}}
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:11},boxWidth:12}}},scales:{y:{beginAtZero:true,grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:11},stepSize:1}},x:{grid:{display:false},ticks:{font:{size:11}}}}}
   });
 
-  // Anzianità usciti
   const anzBuckets = ['< 1 anno','1–3 anni','3–5 anni','> 5 anni'];
   const anzCounts  = anzBuckets.map(b => inPeriodo.filter(e=>e.anz_bucket===b).length);
   new Chart(document.getElementById('chartAnzUsciti'), {
@@ -860,25 +914,22 @@ function initExitCharts() {
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11},boxWidth:10}}}}
   });
 
-  // Copertura
   new Chart(document.getElementById('chartCopertura'), {
     type:'line',
-    data:{labels:months,datasets:[{label:'Copertura %',data:copertura,borderColor:'#2E6DA4',backgroundColor:'rgba(46,109,164,0.08)',fill:true,tension:0.3,pointRadius:5,pointBackgroundColor:'#2E6DA4',borderWidth:2},
+    data:{labels:months,datasets:[
+      {label:'Copertura %',data:copertura,borderColor:'#2E6DA4',backgroundColor:'rgba(46,109,164,0.08)',fill:true,tension:0.3,pointRadius:5,pointBackgroundColor:'#2E6DA4',borderWidth:2},
       {label:'Pareggio (100%)',data:[100,100,100,100,100],borderColor:'#C53030',borderDash:[5,5],borderWidth:1,pointRadius:0}
     ]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:10},boxWidth:10}}},
-      scales:{y:{beginAtZero:true,ticks:{font:{size:11},callback:v=>v+'%'}},x:{grid:{display:false},ticks:{font:{size:11}}}}}
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:10},boxWidth:10}}},scales:{y:{beginAtZero:true,ticks:{font:{size:11},callback:v=>v+'%'}},x:{grid:{display:false},ticks:{font:{size:11}}}}}
   });
 
-  // Sede usciti
   const sedeCount = {};
   inPeriodo.forEach(e=>{ if(e.sede) sedeCount[e.sede]=(sedeCount[e.sede]||0)+1; });
   const sedeE = Object.entries(sedeCount).sort((a,b)=>b[1]-a[1]);
   new Chart(document.getElementById('chartExitSede'), {
     type:'bar', indexAxis:'y',
     data:{labels:sedeE.map(e=>e[0]),datasets:[{data:sedeE.map(e=>e[1]),backgroundColor:'rgba(197,48,48,0.75)',borderRadius:4}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
-      scales:{x:{beginAtZero:true,ticks:{font:{size:11},stepSize:1}},y:{grid:{display:false},ticks:{font:{size:10}}}}}
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{font:{size:11},stepSize:1}},y:{grid:{display:false},ticks:{font:{size:10}}}}}
   });
 }
 
