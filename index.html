@@ -131,6 +131,7 @@
   .month-name { font-size: 12px; font-weight: 600; color: var(--navy); margin-bottom: 8px; }
   .month-stat { display: flex; justify-content: space-between; font-size: 11px; padding: 2px 0; }
   .month-stat span:last-child { font-weight: 600; }
+  .month-card.empty-month { opacity: 0.45; }
   .month-stat.green span:last-child { color: var(--green); }
   .month-stat.amber span:last-child { color: #D97706; }
   .month-stat.blue span:last-child { color: var(--blue); }
@@ -412,6 +413,12 @@
     <div class="section">
       <div class="section-head">
         <span class="section-title">Riepilogo attività mese per mese</span>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <label style="font-size:12px;color:var(--text-muted);font-weight:500;">Anno</label>
+          <select id="filterAnnoMonthly" onchange="renderMonthly()" style="border:1px solid var(--border);border-radius:6px;padding:5px 10px;font-size:13px;background:var(--gray-light);color:var(--text);outline:none;">
+            <option value="">Tutti</option>
+          </select>
+        </div>
       </div>
       <div class="monthly-grid" id="monthlyGrid"></div>
     </div>
@@ -540,7 +547,7 @@ const DATA = [
   {nome:"Christian Ferrazzi",mansione:"Resp. di Salone BYD",sede:"Verona",azienda:"B1",data:"03/06/2026",mese:"Giugno",anno:"2026",area:"Vendite",pipeline:"Apr–Mag 2026"},
   {nome:"Stefano Carpanoni",mansione:"Accettatore Senior",sede:"Padova",azienda:"B1",data:"03/06/2026",mese:"Giugno",anno:"2026",area:"Accettazione",pipeline:"Apr–Mag 2026"},
   {nome:"Ludwig Peer",mansione:"Aiuto Meccanico",sede:"Merano",azienda:"B1",data:"03/06/2026",mese:"Giugno",anno:"2026",area:"Logistica / Magazzino",pipeline:null},
-  {nome:"Laura Bonafini",mansione:"Back Office Senior",sede:"Brescia",azienda:"B1",data:"20/07/2026",mese:"Giugno",anno:"2026",area:"Back Office / Amm.",pipeline:"Mag–Giu 2026"},
+  {nome:"Laura Bonafini",mansione:"Back Office Senior",sede:"Brescia",azienda:"B1",data:"20/07/2026",mese:"Luglio",anno:"2026",area:"Back Office / Amm.",pipeline:"Mag–Giu 2026"},
   // GIUGNO — NUOVI (da xlsx aggiornato)
   {nome:"Luca Peratoner",mansione:"Venditore Citroën – Genius",sede:"Bolzano",azienda:"B1",data:"22/06/2026",mese:"Giugno",anno:"2026",area:"Vendite",pipeline:"Mag–Giu 2026"},
   {nome:"Daniel Juganaru",mansione:"Accettatore Senior",sede:"Bolzano",azienda:"AUTOCITY",data:"08/06/2026",mese:"Giugno",anno:"2026",area:"Accettazione",pipeline:null},
@@ -618,13 +625,17 @@ const VAL_DATA = [
   {candidato:"Enrico Bussolaro",mansione:"Responsabile di Salone",sede:"Vicenza",stato:"A colloquio con AB"},
 ];
 
-const MONTHLY = [
-  {mese:"Febbraio",active:21,hired:8,val:3,pipeline:0,tracker:52},
-  {mese:"Marzo",active:24,hired:4,val:13,pipeline:1,tracker:48},
-  {mese:"Aprile",active:39,hired:9,val:21,pipeline:2,tracker:65},
-  {mese:"Maggio",active:31,hired:8,val:19,pipeline:3,tracker:60},
-  {mese:"Giugno",active:33,hired:12,val:14,pipeline:6,tracker:63},
-];
+// Dati manuali per mese (pos. lavorate, pipeline, tracker — non ricavabili dai dati)
+// Chiave: "Anno-Mese"
+const MONTHLY_META = {
+  "2026-Febbraio":  {active:21, val:3,  pipeline:0,  tracker:52},
+  "2026-Marzo":     {active:24, val:13, pipeline:1,  tracker:48},
+  "2026-Aprile":    {active:39, val:21, pipeline:2,  tracker:65},
+  "2026-Maggio":    {active:31, val:19, pipeline:3,  tracker:60},
+  "2026-Giugno":    {active:33, val:14, pipeline:6,  tracker:63},
+  "2026-Luglio":    {active:0,  val:0,  pipeline:0,  tracker:0},
+};
+const ALL_MONTHS = ["Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno","Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"];
 
 let sortKey = 'mese', sortDir = 1;
 let filtered = [...DATA];
@@ -735,19 +746,56 @@ function renderVal() {
 }
 
 function renderMonthly() {
-  // populate anno detail filter
-  const anniD = [...new Set(DATA.map(d=>d.anno))].filter(Boolean).sort();
+  // Populate anno dropdowns dynamically from DATA
+  const anniAll = [...new Set(DATA.map(d=>d.anno))].filter(Boolean).sort();
+
+  // Anno filter for monthly grid
+  const annoMGrid = document.getElementById('filterAnnoMonthly');
+  if (annoMGrid) {
+    const prevVal = annoMGrid.value;
+    annoMGrid.innerHTML = '<option value="">Tutti</option>' + anniAll.map(a=>`<option>${a}</option>`).join('');
+    if (prevVal) annoMGrid.value = prevVal;
+  }
+
+  // Anno filter for detail table
   const annoDet = document.getElementById('filterAnnoDetail');
-  if (annoDet) annoDet.innerHTML = '<option value="">Tutti</option>' + anniD.map(a=>`<option>${a}</option>`).join('');
-  document.getElementById('monthlyGrid').innerHTML = MONTHLY.map(m=>`
-    <div class="month-card">
-      <div class="month-name">${m.mese} 2026</div>
-      <div class="month-stat blue"><span>Pos. lavorate</span><span>${m.active}</span></div>
-      <div class="month-stat green"><span>Assunzioni</span><span>${m.hired}</span></div>
-      <div class="month-stat amber"><span>In valutazione</span><span>${m.val}</span></div>
-      <div class="month-stat"><span>Pipeline</span><span>${m.pipeline}</span></div>
-      <div class="month-stat"><span>Tracker totale</span><span>${m.tracker}</span></div>
-    </div>`).join('');
+  if (annoDet) {
+    const prevVal2 = annoDet.value;
+    annoDet.innerHTML = '<option value="">Tutti</option>' + anniAll.map(a=>`<option>${a}</option>`).join('');
+    if (prevVal2) annoDet.value = prevVal2;
+  }
+
+  const selectedAnno = document.getElementById('filterAnnoMonthly') ? document.getElementById('filterAnnoMonthly').value : '';
+
+  // Build grid: one card per year × 12 months
+  // If anno filter active: show that year's 12 months
+  // If no filter: show all years × months that have data or meta
+  let cards = '';
+  const yearsToShow = selectedAnno ? [selectedAnno] : anniAll;
+
+  yearsToShow.forEach(anno => {
+    ALL_MONTHS.forEach(mese => {
+      const key = anno + '-' + mese;
+      const meta = MONTHLY_META[key] || {active:0, pipeline:0, tracker:0};
+      // Count hired from DATA
+      const hired = DATA.filter(d => d.anno === anno && d.mese === mese).length;
+      // Only show months that have data OR are in MONTHLY_META OR are in the current/past months of selected year
+      const hasData = hired > 0 || MONTHLY_META[key];
+      if (!hasData && !selectedAnno) return; // skip empty months when showing all years
+      const isActive = hasData;
+      cards += `
+    <div class="month-card${isActive ? '' : ' empty-month'}">
+      <div class="month-name">${mese} ${anno}</div>
+      <div class="month-stat blue"><span>Pos. lavorate</span><span>${meta.active || '—'}</span></div>
+      <div class="month-stat green"><span>Assunzioni</span><span>${hired || '—'}</span></div>
+      <div class="month-stat amber"><span>In valutazione</span><span>${meta.val !== undefined ? meta.val : '—'}</span></div>
+      <div class="month-stat"><span>Pipeline</span><span>${meta.pipeline || '—'}</span></div>
+      <div class="month-stat"><span>Tracker totale</span><span>${meta.tracker || '—'}</span></div>
+    </div>`;
+    });
+  });
+
+  document.getElementById('monthlyGrid').innerHTML = cards || '<div style="padding:20px;color:var(--text-muted);font-size:13px;">Nessun dato per il periodo selezionato.</div>';
   renderMeseDetail();
 }
 
