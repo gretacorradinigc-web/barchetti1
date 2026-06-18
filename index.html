@@ -664,10 +664,10 @@ const AREA_COLORS = {
 
 function initKPI() {
   const total = DATA.length;
-  const usciteTotali = EXITS.length; // 40 — aggiornare manualmente quando cambiano
+  const usciteTotali = EXITS.length;
   const usciteNelPeriodo = EXITS.filter(e=>e.nel_periodo).length;
   const saldo = total - usciteNelPeriodo;
-  const copertura = usciteNelPeriodo > 0 ? Math.round((total / usciteNelPeriodo) * 100) : '—';
+  const copertura = usciteTotali > 0 ? Math.round((total / usciteTotali) * 100) : '—';
   const now = new Date();
   const mesi = ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
   const lastUpdate = mesi[now.getMonth()] + ' ' + now.getFullYear();
