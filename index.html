@@ -165,7 +165,7 @@
 <div class="header">
   <div>
     <div class="header h1" style="font-size:18px;font-weight:600;">Dashboard Recruiting 2026</div>
-    <div class="header-sub">Febbraio – Giugno 2026 · Team Recruiting</div>
+    <div class="header-sub">Febbraio – Dicembre 2026 · Team Recruiting</div>
   </div>
   <div class="header-badge">Riservato – uso interno</div>
 </div>
@@ -231,6 +231,7 @@
           <option>Gennaio</option><option>Febbraio</option><option>Marzo</option><option>Aprile</option>
           <option>Maggio</option><option>Giugno</option><option>Luglio</option><option>Agosto</option>
           <option>Settembre</option><option>Ottobre</option><option>Novembre</option><option>Dicembre</option>
+          <option>Da definire</option>
         </select>
       </div>
       <div class="filter-group">
@@ -390,7 +391,7 @@
     <div class="section">
       <div class="section-head">
         <span class="section-title">Candidati in valutazione / affiancamento a fine periodo</span>
-        <span class="count-badge" style="background:#FFF8E1;color:#7B5800;">14 attivi</span>
+        <span class="count-badge" style="background:#FFF8E1;color:#7B5800;">12 attivi</span>
       </div>
       <div class="tbl-wrap">
         <table class="val-table" id="valTable">
@@ -471,7 +472,7 @@
 
   // Days since start of reporting period (1 Feb 2026)
   const periodStart = new Date(2026, 1, 1); // Feb 1
-  const periodEnd   = new Date(2026, 5, 30); // Jun 30
+  const periodEnd   = new Date(2026, 11, 31); // Dec 31
   const msDay = 86400000;
   const daysSincePeriodStart = Math.max(0, Math.floor((now - periodStart) / msDay));
   const daysToEndPeriod = Math.max(0, Math.ceil((periodEnd - now) / msDay));
@@ -492,7 +493,7 @@
         </div>
         <div class="cc ${periodClass}">
           <span class="cc-val">${daysToEndPeriod}</span>
-          <span class="cc-lbl">a fine periodo (30/06)</span>
+          <span class="cc-lbl">a fine periodo (31/12)</span>
         </div>
         <div class="cc">
           <span class="cc-val">${daysSincePeriodStart}</span>
@@ -500,7 +501,7 @@
         </div>
       </div>
     </div>
-    <div class="period-note">Periodo di riferimento: 1 febbraio – 30 giugno 2026</div>
+    <div class="period-note">Periodo di riferimento: 1 febbraio – 31 dicembre 2026</div>
   `;
 })();
 
@@ -553,6 +554,15 @@ const DATA = [
   {nome:"Daniel Juganaru",mansione:"Accettatore Senior",sede:"Bolzano",azienda:"AUTOCITY",data:"08/06/2026",mese:"Giugno",anno:"2026",area:"Accettazione",pipeline:null},
   // LUGLIO
   {nome:"Max Badiani",mansione:"Venditore Usato",sede:"Bolzano",azienda:"B1",data:"13/07/2026",mese:"Luglio",anno:"2026",area:"Vendite",pipeline:null},
+  {nome:"Xhafer Muka",mansione:"Impiegato alla Preparazione",sede:"Bolzano",azienda:"AUTOCITY",data:"06/07/2026",mese:"Luglio",anno:"2026",area:"Logistica / Magazzino",pipeline:"Giu 2026"},
+  {nome:"Riccardo Genovese",mansione:"Magazziniere",sede:"Bolzano",azienda:"AUTOCITY",data:"13/07/2026",mese:"Luglio",anno:"2026",area:"Logistica / Magazzino",pipeline:null},
+  {nome:"Destiny Odia",mansione:"Sistemista",sede:"Verona",azienda:"PANTA",data:"Da definire",mese:"Da definire",anno:"2026",area:"Tecnica / IT",pipeline:"Giu 2026"},
+  {nome:"Fabio Scamperle",mansione:"Sistemista",sede:"Verona",azienda:"PANTA",data:"Da definire",mese:"Da definire",anno:"2026",area:"Tecnica / IT",pipeline:"Giu 2026"},
+  {nome:"Michele Chiari",mansione:"Procacciatore d'affari",sede:"Brescia",azienda:"B1",data:"Da definire",mese:"Da definire",anno:"2026",area:"Vendite",pipeline:"Giu 2026"},
+  {nome:"Edoardo Gualtieri",mansione:"Procacciatore d'affari",sede:"Desenzano",azienda:"B1",data:"Da definire",mese:"Da definire",anno:"2026",area:"Vendite",pipeline:"Giu 2026"},
+  {nome:"Michele Zigliani",mansione:"Procacciatore d'affari",sede:"Desenzano",azienda:"B1",data:"Da definire",mese:"Da definire",anno:"2026",area:"Vendite",pipeline:"Giu 2026"},
+  // AGOSTO
+  {nome:"Marco Ghirimoldi",mansione:"Venditore",sede:"Padova",azienda:"B1",data:"01/08/2026",mese:"Agosto",anno:"2026",area:"Vendite",pipeline:"Giu–Lug 2026"},
   {nome:"Da Silva Oliveria Eliel Matheus",mansione:"Tecnico Meccanico",sede:"Merano",azienda:"AUTOCITY",data:"11/06/2026",mese:"Giugno",anno:"2026",area:"Tecnica / IT",pipeline:null},
   {nome:"Giacomo Cadorin",mansione:"Genius BYD",sede:"Vicenza",azienda:"B1",data:"03/06/2026",mese:"Giugno",anno:"2026",area:"Genius / Consegnatore",pipeline:null},
 ];
@@ -602,7 +612,6 @@ const EXITS = [
 
 const VAL_DATA = [
   // BOLZANO
-  {candidato:"Xhafer Muka",mansione:"Coord. Amministrativo (AUTOCITY)",sede:"Bolzano",stato:"Proposta da valutare con Michi"},
   {candidato:"Alessandro Ribechin / Davide D'Alberti",mansione:"Venditore Citroën",sede:"Bolzano",stato:"Colloqui entro 11/06"},
   // BRESCIA
   {candidato:"Michele Chiari",mansione:"Venditore senior / junior",sede:"Brescia",stato:"Colloquio con Erica lunedì 15/06"},
@@ -614,7 +623,6 @@ const VAL_DATA = [
   // ORA
   {candidato:"Dainyal Nasar",mansione:"Genius / Assistente Vendite",sede:"Ora",stato:"Colloquio 11/06"},
   // PADOVA
-  {candidato:"Marco Ghirimoldi",mansione:"Venditore",sede:"Padova",stato:"Bozza contratto inviata"},
   {candidato:"Federica Fornasini",mansione:"Genius",sede:"Padova",stato:"⛔ INSERIMENTO BLOCCATO"},
   // VERONA
   {candidato:"—",mansione:"Sistemista TL Manager (PANTA)",sede:"Verona",stato:"Colloqui da organizzare con EC e AB"},
@@ -634,6 +642,7 @@ const MONTHLY_META = {
   "2026-Maggio":    {active:31, val:19, pipeline:3,  tracker:60},
   "2026-Giugno":    {active:33, val:14, pipeline:6,  tracker:63},
   "2026-Luglio":    {active:0,  val:0,  pipeline:0,  tracker:0},
+  "2026-Agosto":    {active:0,  val:0,  pipeline:0,  tracker:0},
 };
 const ALL_MONTHS = ["Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno","Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"];
 
@@ -821,12 +830,17 @@ function switchTab(id) {
 }
 
 function initCharts() {
-  const months = ['Feb','Mar','Apr','Mag','Giu'];
-  const MONTH_ORDER = ['Febbraio','Marzo','Aprile','Maggio','Giugno'];
-  const hired = MONTH_ORDER.map(m => DATA.filter(d=>d.mese===m).length);
+  // Build dynamic month list from DATA (excluding "Da definire"), sorted
+  const MESE_ORD_ALL = {Gennaio:1,Febbraio:2,Marzo:3,Aprile:4,Maggio:5,Giugno:6,Luglio:7,Agosto:8,Settembre:9,Ottobre:10,Novembre:11,Dicembre:12};
+  const MESE_SHORT = {Gennaio:'Gen',Febbraio:'Feb',Marzo:'Mar',Aprile:'Apr',Maggio:'Mag',Giugno:'Giu',Luglio:'Lug',Agosto:'Ago',Settembre:'Set',Ottobre:'Ott',Novembre:'Nov',Dicembre:'Dic'};
+
+  const mesiPresenti = [...new Set(DATA.filter(d=>d.mese!=='Da definire').map(d=>d.mese))]
+    .sort((a,b)=>(MESE_ORD_ALL[a]||99)-(MESE_ORD_ALL[b]||99));
+  const months = mesiPresenti.map(m=>MESE_SHORT[m]||m);
+  const hired  = mesiPresenti.map(m => DATA.filter(d=>d.mese===m).length);
 
   const uscitePeriodo = EXITS.filter(e=>e.nel_periodo);
-  const usciteMensili = MONTH_ORDER.map(m=>uscitePeriodo.filter(e=>e.mese===m).length);
+  const usciteMensili = mesiPresenti.map(m=>uscitePeriodo.filter(e=>e.mese===m).length);
 
   new Chart(document.getElementById('chartAttivo'), {
     type:'bar',
@@ -853,7 +867,7 @@ function initCharts() {
   });
 
   const sedeCount = {};
-  DATA.forEach(d=>{ sedeCount[d.sede] = (sedeCount[d.sede]||0)+1; });
+  DATA.filter(d=>d.mese!=='Da definire').forEach(d=>{ sedeCount[d.sede] = (sedeCount[d.sede]||0)+1; });
   const sedeEntries = Object.entries(sedeCount).sort((a,b)=>b[1]-a[1]);
   new Chart(document.getElementById('chartSede'), {
     type:'bar',
@@ -873,11 +887,66 @@ function initCharts() {
   new Chart(document.getElementById('chartCumul'), {
     type:'line',
     data:{labels:months,datasets:[{label:'Assunzioni',data:hired,borderColor:'#1B5E20',backgroundColor:'rgba(27,94,32,0.08)',fill:true,tension:0.3,pointRadius:5,pointBackgroundColor:'#1B5E20',borderWidth:2}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,max:14,grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:11},stepSize:1}},x:{grid:{display:false},ticks:{font:{size:11}}}}}
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:11},stepSize:1}},x:{grid:{display:false},ticks:{font:{size:11}}}}}
   });
 }
 
-// ─── EXITS ────────────────────────────────────────
+function initExitCharts() {
+  const MESE_ORD_ALL = {Gennaio:1,Febbraio:2,Marzo:3,Aprile:4,Maggio:5,Giugno:6,Luglio:7,Agosto:8,Settembre:9,Ottobre:10,Novembre:11,Dicembre:12};
+  const MESE_SHORT = {Gennaio:'Gen',Febbraio:'Feb',Marzo:'Mar',Aprile:'Apr',Maggio:'Mag',Giugno:'Giu',Luglio:'Lug',Agosto:'Ago',Settembre:'Set',Ottobre:'Ott',Novembre:'Nov',Dicembre:'Dic'};
+
+  const inPeriodo = EXITS.filter(e=>e.nel_periodo);
+
+  // Build month list: union of DATA months + EXIT months (excluding "Da definire")
+  const mesiSet = new Set([
+    ...DATA.filter(d=>d.mese!=='Da definire').map(d=>d.mese),
+    ...inPeriodo.map(e=>e.mese)
+  ]);
+  const mesiF = [...mesiSet].sort((a,b)=>(MESE_ORD_ALL[a]||99)-(MESE_ORD_ALL[b]||99));
+  const months = mesiF.map(m=>MESE_SHORT[m]||m);
+
+  const entrate = mesiF.map(m => DATA.filter(d=>d.mese===m).length);
+  const uscite  = mesiF.map(m => inPeriodo.filter(e=>e.mese===m).length);
+  const copertura = entrate.map((e,i) => uscite[i] ? Math.round(e/uscite[i]*100) : null);
+
+  new Chart(document.getElementById('chartSaldo'), {
+    type:'bar',
+    data:{labels:months, datasets:[
+      {label:'Entrate',data:entrate,backgroundColor:'rgba(27,94,32,0.8)',borderRadius:4,borderSkipped:false},
+      {label:'Uscite', data:uscite, backgroundColor:'rgba(197,48,48,0.75)',borderRadius:4,borderSkipped:false},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:11},boxWidth:12}}},scales:{y:{beginAtZero:true,grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:11},stepSize:1}},x:{grid:{display:false},ticks:{font:{size:11}}}}}
+  });
+
+  const anzBuckets = ['< 1 anno','1–3 anni','3–5 anni','> 5 anni'];
+  const anzCounts  = anzBuckets.map(b => inPeriodo.filter(e=>e.anz_bucket===b).length);
+  new Chart(document.getElementById('chartAnzUsciti'), {
+    type:'doughnut',
+    data:{labels:anzBuckets, datasets:[{data:anzCounts, backgroundColor:['#FEE2E2','#FFF8E1','#DBEAFE','#E8F5E9'], borderColor:['#C53030','#D97706','#2E6DA4','#1B5E20'], borderWidth:2}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11},boxWidth:10}}}}
+  });
+
+  const pareggio = months.map(()=>100);
+  new Chart(document.getElementById('chartCopertura'), {
+    type:'line',
+    data:{labels:months,datasets:[
+      {label:'Copertura %',data:copertura,borderColor:'#2E6DA4',backgroundColor:'rgba(46,109,164,0.08)',fill:true,tension:0.3,pointRadius:5,pointBackgroundColor:'#2E6DA4',borderWidth:2},
+      {label:'Pareggio (100%)',data:pareggio,borderColor:'#C53030',borderDash:[5,5],borderWidth:1,pointRadius:0}
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:10},boxWidth:10}}},scales:{y:{beginAtZero:true,ticks:{font:{size:11},callback:v=>v+'%'}},x:{grid:{display:false},ticks:{font:{size:11}}}}}
+  });
+
+  const sedeCount = {};
+  inPeriodo.forEach(e=>{ if(e.sede) sedeCount[e.sede]=(sedeCount[e.sede]||0)+1; });
+  const sedeE = Object.entries(sedeCount).sort((a,b)=>b[1]-a[1]);
+  new Chart(document.getElementById('chartExitSede'), {
+    type:'bar', indexAxis:'y',
+    data:{labels:sedeE.map(e=>e[0]),datasets:[{data:sedeE.map(e=>e[1]),backgroundColor:'rgba(197,48,48,0.75)',borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{font:{size:11},stepSize:1}},y:{grid:{display:false},ticks:{font:{size:10}}}}}
+  });
+}
+
+// ─── EXITS FUNCTIONS ──────────────────────────────────────
 let filteredExits = [...EXITS];
 let exitSortKey = 'mese', exitSortDir = 1;
 
@@ -914,7 +983,8 @@ function resetExitFilters() {
   renderExitKpi();
 }
 
-const MESE_ORD2 = {Gennaio:1,Febbraio:2,Marzo:3,Aprile:4,Maggio:5,Giugno:6,Luglio:7,Agosto:8};
+const MESE_ORD2 = {Gennaio:1,Febbraio:2,Marzo:3,Aprile:4,Maggio:5,Giugno:6,Luglio:7,Agosto:8,Settembre:9,Ottobre:10,Novembre:11,Dicembre:12};
+const ANZ_ORD = {'< 1 anno':1,'1–3 anni':2,'3–5 anni':3,'> 5 anni':4};
 
 function sortExits(key) {
   if (exitSortKey === key) exitSortDir *= -1;
@@ -933,7 +1003,7 @@ function renderExitTable() {
   if (!filteredExits.length) { body.innerHTML = '<tr><td colspan="7" class="no-results">Nessun risultato</td></tr>'; return; }
   body.innerHTML = filteredExits.map((e,i) => {
     const periodoTag = e.nel_periodo
-      ? '<span class="badge badge-navy">Feb–Giu</span>'
+      ? '<span class="badge badge-navy">Feb–Dic</span>'
       : '<span class="badge" style="background:#F3F4F6;color:#6B7280;">Fuori periodo</span>';
     const doubleTag = e.anche_assunto
       ? ' <span class="badge" style="background:#FEE2E2;color:#C53030;">⚠ anche assunto</span>' : '';
@@ -959,54 +1029,10 @@ function renderExitKpi() {
   const shortStay = f.filter(e=>e.anz_bucket==='< 1 anno').length;
   document.getElementById('exitKpiGrid').innerHTML = [
     {v:f.length, l:'Usciti (filtro attivo)', cls:'red'},
-    {v:inPeriodo.length, l:'Nel periodo Feb–Giu', cls:'red'},
+    {v:inPeriodo.length, l:'Nel periodo Feb–Dic', cls:'red'},
     {v:avgAnz+' anni', l:'Anzianità media', cls:'amber'},
     {v:shortStay, l:'Con < 1 anno di servizio', cls:'amber'},
   ].map(k=>`<div class="kpi ${k.cls}" style="margin:0 16px;"><div class="kpi-val">${k.v}</div><div class="kpi-label">${k.l}</div></div>`).join('');
-}
-
-function initExitCharts() {
-  const months = ['Feb','Mar','Apr','Mag','Giu'];
-  const mesiF = ['Febbraio','Marzo','Aprile','Maggio','Giugno'];
-  const inPeriodo = EXITS.filter(e=>e.nel_periodo);
-  const entrate = mesiF.map(m => DATA.filter(d=>d.mese===m).length);
-  const uscite  = mesiF.map(m => inPeriodo.filter(e=>e.mese===m).length);
-  const copertura = entrate.map((e,i) => uscite[i] ? Math.round(e/uscite[i]*100) : null);
-
-  new Chart(document.getElementById('chartSaldo'), {
-    type:'bar',
-    data:{labels:months, datasets:[
-      {label:'Entrate',data:entrate,backgroundColor:'rgba(27,94,32,0.8)',borderRadius:4,borderSkipped:false},
-      {label:'Uscite', data:uscite, backgroundColor:'rgba(197,48,48,0.75)',borderRadius:4,borderSkipped:false},
-    ]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:11},boxWidth:12}}},scales:{y:{beginAtZero:true,grid:{color:'rgba(0,0,0,0.05)'},ticks:{font:{size:11},stepSize:1}},x:{grid:{display:false},ticks:{font:{size:11}}}}}
-  });
-
-  const anzBuckets = ['< 1 anno','1–3 anni','3–5 anni','> 5 anni'];
-  const anzCounts  = anzBuckets.map(b => inPeriodo.filter(e=>e.anz_bucket===b).length);
-  new Chart(document.getElementById('chartAnzUsciti'), {
-    type:'doughnut',
-    data:{labels:anzBuckets, datasets:[{data:anzCounts, backgroundColor:['#FEE2E2','#FFF8E1','#DBEAFE','#E8F5E9'], borderColor:['#C53030','#D97706','#2E6DA4','#1B5E20'], borderWidth:2}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:11},boxWidth:10}}}}
-  });
-
-  new Chart(document.getElementById('chartCopertura'), {
-    type:'line',
-    data:{labels:months,datasets:[
-      {label:'Copertura %',data:copertura,borderColor:'#2E6DA4',backgroundColor:'rgba(46,109,164,0.08)',fill:true,tension:0.3,pointRadius:5,pointBackgroundColor:'#2E6DA4',borderWidth:2},
-      {label:'Pareggio (100%)',data:[100,100,100,100,100],borderColor:'#C53030',borderDash:[5,5],borderWidth:1,pointRadius:0}
-    ]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:10},boxWidth:10}}},scales:{y:{beginAtZero:true,ticks:{font:{size:11},callback:v=>v+'%'}},x:{grid:{display:false},ticks:{font:{size:11}}}}}
-  });
-
-  const sedeCount = {};
-  inPeriodo.forEach(e=>{ if(e.sede) sedeCount[e.sede]=(sedeCount[e.sede]||0)+1; });
-  const sedeE = Object.entries(sedeCount).sort((a,b)=>b[1]-a[1]);
-  new Chart(document.getElementById('chartExitSede'), {
-    type:'bar', indexAxis:'y',
-    data:{labels:sedeE.map(e=>e[0]),datasets:[{data:sedeE.map(e=>e[1]),backgroundColor:'rgba(197,48,48,0.75)',borderRadius:4}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{font:{size:11},stepSize:1}},y:{grid:{display:false},ticks:{font:{size:10}}}}}
-  });
 }
 
 initKPI();
