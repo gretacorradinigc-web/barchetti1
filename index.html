@@ -330,7 +330,7 @@
     <div class="section" style="margin-bottom:16px;border-left:4px solid #C53030;">
       <div class="section-head">
         <span class="section-title" style="color:#C53030;">⚠ Casi speciali: assunti e poi usciti nello stesso periodo</span>
-        <span class="count-badge" style="background:#FEE2E2;color:#C53030;">4 persone</span>
+        <span class="count-badge" style="background:#FEE2E2;color:#C53030;">5 persone</span>
       </div>
       <div class="tbl-wrap">
         <table>
@@ -340,6 +340,7 @@
             <tr class="even"><td class="td-name">Fornasiero Nicolas</td><td>Vicenza</td><td><span class="badge badge-green">Marzo</span></td><td><span class="badge" style="background:#FEE2E2;color:#C53030;">Marzo</span></td><td>~1 mese</td></tr>
             <tr><td class="td-name">Hafsa Charafeddine</td><td>Brescia</td><td><span class="badge badge-green">Marzo</span></td><td><span class="badge" style="background:#FEE2E2;color:#C53030;">Aprile</span></td><td>~2 settimane</td></tr>
             <tr class="even"><td class="td-name">Manente Matteo</td><td>Bolzano</td><td><span class="badge badge-green">Marzo</span></td><td><span class="badge" style="background:#FEE2E2;color:#C53030;">Maggio</span></td><td>~6 settimane</td></tr>
+            <tr><td class="td-name">Ciriolo Tommaso</td><td>Bologna</td><td><span class="badge badge-green">Giugno</span></td><td><span class="badge" style="background:#FEE2E2;color:#C53030;">Giugno</span></td><td>~1 settimana</td></tr>
           </tbody>
         </table>
       </div>
@@ -596,6 +597,11 @@ const EXITS = [
   {nome:"Boschetto Vittorio",azienda:"B1",reparto:"B1 - ENASARCO BYD VR",sede:"Padova",data_inizio:"08/05/2025",data_uscita:"05/05/2026",mese:"Maggio",eta:25,eta_bucket:"< 30",anzianita:0.9,anz_bucket:"< 1 anno",mansione:"",nel_periodo:true},
   {nome:"Bedin Alex",azienda:"B1",reparto:"B1 - ENASARCO CIT BZ",sede:"Bolzano",data_inizio:"01/06/2009",data_uscita:"30/06/2026",mese:"Giugno",eta:44,eta_bucket:"40–49",anzianita:17.0,anz_bucket:"> 5 anni",mansione:"Resp. Vendite Agente",nel_periodo:true},
   {nome:"Babic Dajana",azienda:"B1",reparto:"B1 - CIT VI BACK OFFICE",sede:"Vicenza",data_inizio:"24/11/2023",data_uscita:"01/02/2026",mese:"Febbraio",eta:23,eta_bucket:"< 30",anzianita:2.1,anz_bucket:"1–3 anni",mansione:"",nel_periodo:true},
+  {nome:"Gogna Boris",azienda:"B1",reparto:"",sede:"Bolzano",data_inizio:"13/11/2016",data_uscita:"19/06/2026",mese:"Giugno",eta:45,eta_bucket:"40–49",anzianita:9.6,anz_bucket:"> 5 anni",mansione:"",nel_periodo:true},
+  {nome:"Ciriolo Tommaso",azienda:"B1",reparto:"B1 - BYD BO",sede:"Bologna",data_inizio:"03/06/2026",data_uscita:"11/06/2026",mese:"Giugno",eta:21,eta_bucket:"< 30",anzianita:0,anz_bucket:"< 1 anno",mansione:"Venditore Genius",nel_periodo:true,anche_assunto:true},
+  {nome:"Spina Simone",azienda:"B1",reparto:"B1 - ORA - VENDITA AGENTI",sede:"Ora",data_inizio:"10/11/2025",data_uscita:"30/05/2026",mese:"Maggio",eta:25,eta_bucket:"< 30",anzianita:0.5,anz_bucket:"< 1 anno",mansione:"Venditore Dipendente",nel_periodo:true},
+  {nome:"Capitanio Alberto",azienda:"B1",reparto:"",sede:"Bolzano",data_inizio:"04/12/2025",data_uscita:"28/05/2026",mese:"Maggio",eta:41,eta_bucket:"40–49",anzianita:0.4,anz_bucket:"< 1 anno",mansione:"",nel_periodo:true},
+  {nome:"Malagutti Mirco",azienda:"PANTA",reparto:"PANTASERVICE srl",sede:"Bolzano",data_inizio:"05/06/2023",data_uscita:"14/05/2026",mese:"Maggio",eta:30,eta_bucket:"30–39",anzianita:2.9,anz_bucket:"1–3 anni",mansione:"",nel_periodo:true},
   // Fuori periodo
   {nome:"Veronesi Cristiano",azienda:"AUTOCITY",reparto:"AUTOCITY - VR MAGAZZINO",sede:"Verona",data_inizio:"02/01/2026",data_uscita:"12/01/2026",mese:"Gennaio",eta:48,eta_bucket:"40–49",anzianita:0,anz_bucket:"< 1 anno",mansione:"",nel_periodo:false},
   {nome:"Tasholli Endrit",azienda:"B1",reparto:"B1 - VO BOLZANO",sede:"Bolzano",data_inizio:"17/03/2021",data_uscita:"06/07/2026",mese:"Luglio",eta:25,eta_bucket:"< 30",anzianita:5.3,anz_bucket:"> 5 anni",mansione:"Consulente Enasarco",nel_periodo:false},
@@ -658,13 +664,20 @@ const AREA_COLORS = {
 
 function initKPI() {
   const total = DATA.length;
+  const usciteTotali = EXITS.length; // 40 — aggiornare manualmente quando cambiano
+  const usciteNelPeriodo = EXITS.filter(e=>e.nel_periodo).length;
+  const saldo = total - usciteNelPeriodo;
+  const copertura = usciteNelPeriodo > 0 ? Math.round((total / usciteNelPeriodo) * 100) : '—';
+  const now = new Date();
+  const mesi = ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
+  const lastUpdate = mesi[now.getMonth()] + ' ' + now.getFullYear();
   document.getElementById('kpiGrid').innerHTML = [
-    {v:total,l:'Assunzioni totali (Feb–Giu)',cls:'green'},
-    {v:40,l:'Uscite totali 2026',cls:'red'},
-    {v:total-40,l:'Saldo netto personale',cls: (total-40)>=0 ? 'green' : 'red'},
-    {v:4,l:'Assunti e poi dimessi',cls:'amber'},
-    {v:'92.5%',l:'Copertura entrate/uscite',cls:'blue'},
-    {v:'Giu 2026',l:'Ultimo aggiornamento',cls:''},
+    {v:total, l:'Assunzioni totali (Feb–Dic)', cls:'green'},
+    {v:usciteTotali, l:'Uscite totali 2026', cls:'red'},
+    {v:(saldo>0?'+':'')+saldo, l:'Saldo netto personale', cls: saldo>=0 ? 'green' : 'red'},
+    {v:5, l:'Assunti e poi dimessi', cls:'amber'},
+    {v:copertura+(copertura!=='—'?'%':''), l:'Copertura entrate/uscite', cls:'blue'},
+    {v:lastUpdate, l:'Ultimo aggiornamento', cls:''},
   ].map(k=>`<div class="kpi ${k.cls}"><div class="kpi-val">${k.v}</div><div class="kpi-label">${k.l}</div></div>`).join('');
 }
 
