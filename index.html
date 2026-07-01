@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard Recruiting — Feb/Giu 2026</title>
+<title>Dashboard Recruiting — Feb/Lug 2026</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -392,7 +392,7 @@
     <div class="section">
       <div class="section-head">
         <span class="section-title">Candidati in valutazione / affiancamento a fine periodo</span>
-        <span class="count-badge" style="background:#FFF8E1;color:#7B5800;">12 attivi</span>
+        <span class="count-badge" style="background:#FFF8E1;color:#7B5800;">15 attivi</span>
       </div>
       <div class="tbl-wrap">
         <table class="val-table" id="valTable">
@@ -401,7 +401,7 @@
               <th>Candidato/i</th>
               <th>Posizione</th>
               <th>Sede</th>
-              <th>Stato a fine giugno</th>
+              <th>Stato a fine luglio</th>
             </tr>
           </thead>
           <tbody id="valBody"></tbody>
@@ -555,13 +555,11 @@ const DATA = [
   {nome:"Daniel Juganaru",mansione:"Accettatore Senior",sede:"Bolzano",azienda:"AUTOCITY",data:"08/06/2026",mese:"Giugno",anno:"2026",area:"Accettazione",pipeline:null},
   // LUGLIO
   {nome:"Max Badiani",mansione:"Venditore Usato",sede:"Bolzano",azienda:"B1",data:"13/07/2026",mese:"Luglio",anno:"2026",area:"Vendite",pipeline:null},
-  {nome:"Xhafer Muka",mansione:"Impiegato alla Preparazione",sede:"Bolzano",azienda:"AUTOCITY",data:"06/07/2026",mese:"Luglio",anno:"2026",area:"Logistica / Magazzino",pipeline:"Giu 2026"},
-  {nome:"Riccardo Genovese",mansione:"Magazziniere",sede:"Bolzano",azienda:"AUTOCITY",data:"13/07/2026",mese:"Luglio",anno:"2026",area:"Logistica / Magazzino",pipeline:null},
-  {nome:"Destiny Odia",mansione:"Sistemista",sede:"Verona",azienda:"PANTA",data:"Da definire",mese:"Da definire",anno:"2026",area:"Tecnica / IT",pipeline:"Giu 2026"},
-  {nome:"Fabio Scamperle",mansione:"Sistemista",sede:"Verona",azienda:"PANTA",data:"Da definire",mese:"Da definire",anno:"2026",area:"Tecnica / IT",pipeline:"Giu 2026"},
-  {nome:"Michele Chiari",mansione:"Procacciatore d'affari",sede:"Brescia",azienda:"B1",data:"Da definire",mese:"Da definire",anno:"2026",area:"Vendite",pipeline:"Giu 2026"},
-  {nome:"Edoardo Gualtieri",mansione:"Procacciatore d'affari",sede:"Desenzano",azienda:"B1",data:"Da definire",mese:"Da definire",anno:"2026",area:"Vendite",pipeline:"Giu 2026"},
-  {nome:"Michele Zigliani",mansione:"Procacciatore d'affari",sede:"Desenzano",azienda:"B1",data:"Da definire",mese:"Da definire",anno:"2026",area:"Vendite",pipeline:"Giu 2026"},
+  {nome:"Xhafer Muka",mansione:"Impiegato alla Preparazione",sede:"Bolzano",azienda:"AUTOCITY",data:"13/07/2026",mese:"Luglio",anno:"2026",area:"Logistica / Magazzino",pipeline:"Giu 2026"},
+  {nome:"Thyron Pallabazzer",mansione:"Magazziniere",sede:"Bolzano",azienda:"AUTOCITY",data:"01/07/2026",mese:"Luglio",anno:"2026",area:"Logistica / Magazzino",pipeline:null},
+  {nome:"Fabio Scamperle",mansione:"Sistemista",sede:"Verona",azienda:"PANTA",data:"13/07/2026",mese:"Luglio",anno:"2026",area:"Tecnica / IT",pipeline:"Giu 2026"},
+  {nome:"Michele Chiari",mansione:"Venditore Opel",sede:"Brescia",azienda:"B1",data:"Da definire",mese:"Da definire",anno:"2026",area:"Vendite",pipeline:"In attesa di confermare da Detogni dopo fine mese"},
+  {nome:"Diana Busolini",mansione:"Segretaria Service",sede:"Bolzano",azienda:"AUTOCITY",data:"01/08/2026",mese:"Agosto",anno:"2026",area:"Back Office / Amm.",pipeline:null},
   // AGOSTO
   {nome:"Marco Ghirimoldi",mansione:"Venditore",sede:"Padova",azienda:"B1",data:"01/08/2026",mese:"Agosto",anno:"2026",area:"Vendite",pipeline:"Giu–Lug 2026"},
   {nome:"Da Silva Oliveria Eliel Matheus",mansione:"Tecnico Meccanico",sede:"Merano",azienda:"AUTOCITY",data:"11/06/2026",mese:"Giugno",anno:"2026",area:"Tecnica / IT",pipeline:null},
@@ -585,10 +583,6 @@ const EXITS = [
   {nome:"Mazzocco Edoardo",azienda:"B1",reparto:"B1 - OPEL BS ACCETTAZIONE",sede:"Bressanone",data_inizio:"07/01/2025",data_uscita:"23/04/2026",mese:"Aprile",eta:30,eta_bucket:"30–39",anzianita:1.2,anz_bucket:"1–3 anni",mansione:"",nel_periodo:true},
   {nome:"Manente Matteo",azienda:"AUTOCITY",reparto:"AUTOCITY - BZ ACCETTAZIONE",sede:"Bolzano",data_inizio:"23/03/2026",data_uscita:"05/05/2026",mese:"Maggio",eta:44,eta_bucket:"40–49",anzianita:0.1,anz_bucket:"< 1 anno",mansione:"",nel_periodo:true,anche_assunto:true},
   {nome:"Loria Cristian",azienda:"B1",reparto:"B1 - BYD - VI",sede:"Vicenza",data_inizio:"16/10/2025",data_uscita:"28/02/2026",mese:"Febbraio",eta:32,eta_bucket:"30–39",anzianita:0.3,anz_bucket:"< 1 anno",mansione:"",nel_periodo:true},
-  {nome:"Limontini Riccardo",azienda:"B1",reparto:"B1 - CIT BS BACK OFFICE",sede:"Brescia",data_inizio:"23/01/2025",data_uscita:"30/04/2026",mese:"Aprile",eta:37,eta_bucket:"30–39",anzianita:1.2,anz_bucket:"1–3 anni",mansione:"",nel_periodo:true},
-  {nome:"Keegan Adam Justin",azienda:"AUTOCITY",reparto:"",sede:"Bolzano",data_inizio:"17/09/2025",data_uscita:"15/05/2026",mese:"Maggio",eta:39,eta_bucket:"30–39",anzianita:0.6,anz_bucket:"< 1 anno",mansione:"",nel_periodo:true},
-  {nome:"Greco Francesco",azienda:"AUTOCITY",reparto:"AUTOCITY - BZ MAGAZZINO",sede:"Bolzano",data_inizio:"04/10/2021",data_uscita:"22/05/2026",mese:"Maggio",eta:26,eta_bucket:"< 30",anzianita:4.6,anz_bucket:"3–5 anni",mansione:"",nel_periodo:true},
-  {nome:"Fornasiero Nicolas",azienda:"B1",reparto:"B1 - BYD - VI",sede:"Vicenza",data_inizio:"16/02/2026",data_uscita:"20/03/2026",mese:"Marzo",eta:32,eta_bucket:"30–39",anzianita:0,anz_bucket:"< 1 anno",mansione:"",nel_periodo:true,anche_assunto:true},
   {nome:"Ferrari Michele",azienda:"AUTOCITY",reparto:"AUTOCITY - BZ ACCETTAZIONE",sede:"Bolzano",data_inizio:"10/05/2023",data_uscita:"06/02/2026",mese:"Febbraio",eta:38,eta_bucket:"30–39",anzianita:2.7,anz_bucket:"1–3 anni",mansione:"",nel_periodo:true},
   {nome:"Crepaz Tobias",azienda:"B1",reparto:"B1 - OPEL BK OFFICINA",sede:"Brunico",data_inizio:"02/07/2001",data_uscita:"21/05/2026",mese:"Maggio",eta:40,eta_bucket:"40–49",anzianita:24.9,anz_bucket:"> 5 anni",mansione:"",nel_periodo:true},
   {nome:"Charafeddine Hafsa",azienda:"B1",reparto:"B1 - MARKETING & BDC",sede:"Brescia",data_inizio:"23/03/2026",data_uscita:"07/04/2026",mese:"Aprile",eta:25,eta_bucket:"< 30",anzianita:0,anz_bucket:"< 1 anno",mansione:"",nel_periodo:true,anche_assunto:true},
@@ -617,26 +611,26 @@ const EXITS = [
 ];
 
 const VAL_DATA = [
+  // BOLOGNA
+  {candidato:"Giacomo Borgatti",mansione:"Genius Denza",sede:"Bologna",stato:"Da organizzare colloquio con Coveri e Bettelli"},
+  {candidato:"Federico Macchiavelli",mansione:"Genius BYD",sede:"Bologna",stato:"Proposta avanzata"},
   // BOLZANO
-  {candidato:"Alessandro Ribechin / Davide D'Alberti",mansione:"Venditore Citroën",sede:"Bolzano",stato:"Colloqui entro 11/06"},
+  {candidato:"Harald Obrist",mansione:"Venditore BYD",sede:"Bolzano",stato:"⚠ Chiamare urgentemente"},
+  {candidato:"Giulio De Carolis",mansione:"Sistemista (PANTA)",sede:"Bolzano",stato:"Colloqui organizzati il 23-24"},
+  {candidato:"Riccardo Palumbo",mansione:"Responsabile Ricambi",sede:"Bolzano",stato:"Proposta avanzata"},
+  {candidato:"Maurizio Frezza",mansione:"Tecnico Diagnostico WV",sede:"Bolzano",stato:"Proposta avanzata"},
+  {candidato:"Festa Girolamo",mansione:"Accettatore VW",sede:"Bolzano",stato:"Proposta avanzata"},
+  {candidato:"Don Dorde",mansione:"TL Preparatore VO",sede:"Bolzano",stato:"In affiancamento dal 06/07"},
+  {candidato:"Tonolli Marco",mansione:"Venditore Stellantis – Genius",sede:"Bolzano",stato:"Da organizzare affiancamento"},
   // BRESCIA
-  {candidato:"Michele Chiari",mansione:"Venditore senior / junior",sede:"Brescia",stato:"Colloquio con Erica lunedì 15/06"},
   {candidato:"Stefano Brognoli",mansione:"RDS",sede:"Brescia",stato:"A colloquio con AB"},
-  // BRUNICO
-  {candidato:"Denissa Pepe",mansione:"Accettatore / Magazzino Ricambi",sede:"Brunico",stato:"Val. positiva – attesa valutazione Spinato"},
-  // DESENZANO
-  {candidato:"Michele Zigliani / Massim. Grisalfi / E. Metelli / E. Gualtieri",mansione:"Venditore x 2",sede:"Desenzano",stato:"Affiancamento Zigliani il 13 + colloqui 11/06"},
-  // ORA
-  {candidato:"Dainyal Nasar",mansione:"Genius / Assistente Vendite",sede:"Ora",stato:"Colloquio 11/06"},
+  {candidato:"Eriola Hiderhaj",mansione:"BDC",sede:"Brescia",stato:"Test con A. Romano"},
   // PADOVA
-  {candidato:"Federica Fornasini",mansione:"Genius",sede:"Padova",stato:"⛔ INSERIMENTO BLOCCATO"},
+  {candidato:"Tommaso Basile",mansione:"Meccanico",sede:"Padova",stato:"Proposta avanzata"},
   // VERONA
   {candidato:"—",mansione:"Sistemista TL Manager (PANTA)",sede:"Verona",stato:"Colloqui da organizzare con EC e AB"},
-  {candidato:"Scamperle / Odia",mansione:"Sistemista (PANTA)",sede:"Verona",stato:"2° colloquio in corso"},
-  {candidato:"Lois Serjanaj / Hao Jie Zhan / B. Russo",mansione:"Analista–Programmatore (PANTA)",sede:"Verona",stato:"Colloquio da organizzare"},
-  {candidato:"Giuseppina Di Bartolo",mansione:"Accettatore Senior",sede:"Verona",stato:"Buon profilo – Liguori non valuta"},
-  // VICENZA
-  {candidato:"Enrico Bussolaro",mansione:"Responsabile di Salone",sede:"Vicenza",stato:"A colloquio con AB"},
+  {candidato:"Lois Serjanaj / Hao Jie Zhan / Biagio Russo",mansione:"Analista–Programmatore (PANTA)",sede:"Verona",stato:"Da organizzare colloquio"},
+  {candidato:"Pietro Trentinella",mansione:"Accettatore Senior",sede:"Verona",stato:"Proposta avanzata"},
 ];
 
 // Dati manuali per mese (pos. lavorate, pipeline, tracker — non ricavabili dai dati)
@@ -647,7 +641,7 @@ const MONTHLY_META = {
   "2026-Aprile":    {active:39, val:21, pipeline:2,  tracker:65},
   "2026-Maggio":    {active:31, val:19, pipeline:3,  tracker:60},
   "2026-Giugno":    {active:33, val:14, pipeline:6,  tracker:63},
-  "2026-Luglio":    {active:0,  val:0,  pipeline:0,  tracker:0},
+  "2026-Luglio":    {active:54, val:15, pipeline:3,  tracker:0},
   "2026-Agosto":    {active:0,  val:0,  pipeline:0,  tracker:0},
 };
 const ALL_MONTHS = ["Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno","Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"];
